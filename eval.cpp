@@ -32,8 +32,8 @@ int material_eval(Position *p) {
         U64 white_pieces = p->whitePieces[i];
         U64 black_pieces = p->blackPieces[i];
         for(int j=0; j<64; j++) {
-            int piecew = white_pieces[j];
-            int pieceb = black_pieces[j];
+            int piecew = white_pieces % 10;
+            int pieceb = black_pieces % 10;
             if(piecew) {
                 white += piece_values[i];
             } if(pieceb) {
