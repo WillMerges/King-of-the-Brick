@@ -57,9 +57,33 @@ void Board::makeMove(Move move){
             moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
             break;
 
-        case CASTLE:
-
+        case CASTLING:
+            if (pos->whiteToMove){
+                if(to == 2){ //If white king is moving to C1
+                    moverPieces[ROOK] = moverPieces[ROOK] | squareMasks[3];
+                }
+                else { //If white king is moving to G1
+                    moverPieces[ROOK] = moverPieces[ROOK] | squareMasks[5];
+                }
+            }
+            else{
+                if(to == 58){ //If black king is moving to C8
+                    moverPieces[ROOK] = moverPieces[ROOK] | squareMasks[59];
+                }
+                else { //If black king is moving to G8
+                    moverPieces[ROOK] = moverPieces[ROOK] | squareMasks[61];
+                }
+            }
             moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
+            break;
+        
+        case ENPASSANT:
+            if (pos->whiteToMove){
+                opponentPieces
+            }
+            else{
+
+            }
             break;
 
         default:
