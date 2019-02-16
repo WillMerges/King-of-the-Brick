@@ -11,6 +11,11 @@ typedef struct{
     U8 enPassantLoc;
     U8 fiftyMoveCount;
 
+    bool canWhiteQueensideCastle;
+    bool canWhiteKingsideCastle;
+    bool canBlackQueensideCastle;
+    bool canBlackKingsideCastle;
+
     Bitboard whitePieces[NUM_PIECE_TYPES];
     Bitboard blackPieces[NUM_PIECE_TYPES];
     Bitboard WhitePiecesBB;
@@ -32,4 +37,6 @@ class Board{
     bool parseFen(std::string fen);
 
 }
+
+constexpr MAX_MOVES=2000;
 #endif
