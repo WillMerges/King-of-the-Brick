@@ -4,8 +4,21 @@
 #include "types.h"
 #include <string.h>
 #include <sstream>
+#include "bbmagic.h"
 
 Position allPos[MAX_MOVES];
+
+bool isOwnKingInCheck(Position pos){
+
+	if(whiteToMove())
+		isSquareAttacked(pos, pos -> whitePieces[KING]);
+	else
+		isSquareAttacked(pos, pos -> blackPieces[KING]);
+	
+	
+
+}
+
 
 void Board::undoMove(){
     pos=pos->prevPos;

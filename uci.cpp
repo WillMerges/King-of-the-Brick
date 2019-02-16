@@ -31,17 +31,17 @@ void position(std::stringstream ss) {
 	if(!token.compare("startpos")) {
 		boardfen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 	}else{
-		for(int i = 0; i < 6){
+		for(int i = 0; i < 6; i++){
 			std::getline(ss, token, ' ');
 			boardfen.append(token);
-			boardfen.append(' ');
+			boardfen.append(" ");
 		}
 	}
 	board.parseFen(boardfen);
 	
 	std::string move;
 	while(getline(ss, move, ' ')){
-		char* movestr = move.c_str();
+		const char* movestr = move.c_str();
 		
 		//convert move string to move object
 		U8 file1 = getFile(movestr[0] - 'a');
