@@ -47,6 +47,6 @@ constexpr PieceType get_promotion_type(Move move){
     return PieceType((move>>17)&7);
 }
 
-constexpr int MAX_MOVES =90;
+constexpr int MAX_MOVES =1000;
 
 #endif
