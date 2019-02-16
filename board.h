@@ -19,4 +19,11 @@ typedef struct{
     //Move lastMove;
 } Position;
 
+namespace Board{
+    void makeMove(Move move);
+    
+    bool isDrawn();
+    bool isGameOver();
+
+}
 #endif

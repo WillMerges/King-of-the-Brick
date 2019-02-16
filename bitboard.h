@@ -9,5 +9,5 @@ U8 popcnt(U64);
 U8 getSquare(U8 rank, U8 file);
 
 char[3] getSquareAsAlgebraicLoc(U8 sq){
-    
-} 
+
+}
