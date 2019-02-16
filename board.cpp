@@ -124,29 +124,29 @@ bool Board::parseFen(std::string fen){
             if(*row<'0' && *row >'9') {
                 U64 sq = getSquare(right, up);
                 if(*row == 'p') {
-                    this->pos->blackPieces[PAWN];
+                    this->pos->blackPieces[PAWN] |= sq;
                 } else if(*row == 'k') {
-                    this->pos->blackPieces[KING];
+                    this->pos->blackPieces[KING] |= sq;
                 } else if(*row == 'r') {
-                    this->pos->blackPieces[ROOK];
+                    this->pos->blackPieces[ROOK] |= sq;
                 } else if(*row == 'n') {
-                    this->pos->blackPieces[KNIGHT];
+                    this->pos->blackPieces[KNIGHT] |= sq;
                 } else if(*row == 'b') {
-                    this->pos->blackPieces[BISHOP];
+                    this->pos->blackPieces[BISHOP] |= sq;
                 } else if(*row == 'q') {
-                    this->pos->blackPieces[QUEEN];
+                    this->pos->blackPieces[QUEEN] |= sq;
                 } else if(*row == 'P') {
-                    this->pos->whitePieces[PAWN];
+                    this->pos->whitePieces[PAWN] |= sq;
                 } else if(*row == 'K') {
-                    this->pos->whitePieces[KING];
+                    this->pos->whitePieces[KING] |= sq;
                 } else if(*row == 'R') {
-                    this->pos->whitePieces[ROOK];
+                    this->pos->whitePieces[ROOK] |= sq;
                 } else if(*row == 'N') {
-                    this->pos->whitePieces[KNIGHT];
+                    this->pos->whitePieces[KNIGHT] |= sq;
                 } else if(*row == 'B') {
-                    this->pos->whitePieces[BISHOP];
+                    this->pos->whitePieces[BISHOP] |= sq;
                 } else if(*row == 'Q') {
-                    this->pos->whitePieces[QUEEN];
+                    this->pos->whitePieces[QUEEN] |= sq;
                 } //else it's empty probably
                 right++;
             } else {
