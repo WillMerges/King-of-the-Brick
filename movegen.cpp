@@ -50,7 +50,7 @@ PieceType getWhitePieceOnSquare(Position * pos, U64 mask){
 //PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING
 int mvvlvaValues[] = {1000000,2000000,3000000,4000000,5000000,10000000};
 Position * info;//Set me before calling addMove. TODO
-void addMove(Move move, ExtMove moves[], int index){
+void addMove(Move move, ExtMove moves[],int index, bool isWhitePieceMoving, Position * info){
 	moves[index].move = move;
 }
 
@@ -120,7 +120,7 @@ U8 getAllLegalMoves(Board* b, ExtMove list[]){
 	bool check = b->isOwnKingInCheck();
 	int j = 0;
 	U64 mask;
-	if(b->currentBoard()->whiteToMove){
+	if(b->pos->whiteToMove){
 		mask = potentiallyPinned[trailingZeroCount(b->pos->whitePieces[KING])];
 	}else{
 		mask = potentiallyPinned[trailingZeroCount(b->pos->blackPieces[KING])];
@@ -189,7 +189,7 @@ U8 getWhiteKingMoves(Position * b, ExtMove moves[], int index) {
 		if ( (king >> 1 & b->AllPiecesBB) == 0L
 				&& (king>> 2 & b->AllPiecesBB) == 0L
 				&& (king>> 3 & b->AllPiecesBB) == 0L) {
-			if ( (king>> 4 & b->WhiteRookBB) != 0L) {
+			if ( (king>> 4 & b->whitePieces[ROOK]) != 0L) {
 				if ( !isSquareAttacked(b, king, true)
 						&& !isSquareAttacked(b, king >> 1,
 								true)
@@ -204,7 +204,7 @@ U8 getWhiteKingMoves(Position * b, ExtMove moves[], int index) {
 	
 	return num_moves_generated;
 }
-U8 getBlackKingMoves(BoardInfo* b, ExtMove moves[], int index) {
+U8 getBlackKingMoves(Position* b, ExtMove moves[], int index) {
 	U64 king = b->blackPieces[KING];
 	
 	int num_moves_generated = 0;
@@ -222,13 +222,13 @@ U8 getBlackKingMoves(BoardInfo* b, ExtMove moves[], int index) {
 	}
 	
 	if (b->blackKingCastle) {
-		if ( (b->BlackKingBB << 1 & b->AllPiecesBB) == 0L
-				&& (b->BlackKingBB << 2 & b->AllPiecesBB) == 0L) {
-			if ( (b->BlackKingBB << 3 & b->BlackRookBB) != 0L) {
-				if ( !isSquareAttacked(b, b->BlackKingBB, false)
-						&& !isSquareAttacked(b, b->BlackKingBB << 1,
+		if ( (b->blackPieces[KING] << 1 & b->AllPiecesBB) == 0L
+				&& (b->blackPieces[KING] << 2 & b->AllPiecesBB) == 0L) {
+			if ( (b->blackPieces[KING] << 3 & b->blackPieces[ROOK]) != 0L) {
+				if ( !isSquareAttacked(b, b->blackPieces[KING], false)
+						&& !isSquareAttacked(b, b->blackPieces[KING] << 1,
 								false)
-						&& !isSquareAttacked(b, b->BlackKingBB << 2,
+						&& !isSquareAttacked(b, b->blackPieces[KING] << 2,
 								false)) {
 					addMove(createMove(from_loc, from_loc + 2, KING, KING, CASTLING),moves,index+num_moves_generated,false,b);
 					num_moves_generated++;
@@ -239,13 +239,13 @@ U8 getBlackKingMoves(BoardInfo* b, ExtMove moves[], int index) {
 	
 	if (b->blackQueenCastle) {
 		if ( (b->BlackKingBB >> 1 & b->AllPiecesBB) == 0L
-				&& (b->BlackKingBB >> 2 & b->AllPiecesBB) == 0L
-				&& (b->BlackKingBB >> 3 & b->AllPiecesBB) == 0L) {
-			if ( (b->BlackKingBB >> 4 & b->BlackRookBB) != 0L) {
-				if ( !isSquareAttacked(b, b->BlackKingBB, false)
-						&& !isSquareAttacked(b, b->BlackKingBB >> 1,
+				&& (b->blackPieces[KING] >> 2 & b->AllPiecesBB) == 0L
+				&& (b->blackPieces[KING] >> 3 & b->AllPiecesBB) == 0L) {
+			if ( (b->blackPieces[KING] >> 4 & b->blackPieces[ROOK]) != 0L) {
+				if ( !isSquareAttacked(b, b->blackPieces[KING], false)
+						&& !isSquareAttacked(b, b->blackPieces[KING] >> 1,
 								false)
-						&& !isSquareAttacked(b, b->BlackKingBB >> 2,
+						&& !isSquareAttacked(b, b->blackPieces[KING] >> 2,
 								false)) {
 					addMove(createMove(from_loc, from_loc - 2, KING,KING, CASTLING),moves,index+num_moves_generated,false,b);
 					num_moves_generated++;
