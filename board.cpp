@@ -158,7 +158,7 @@ bool Board::parseFen(std::string fen){
 
     for(int i=0; i<NUM_PIECE_TYPES; i++) {
         this->pos->WhitePiecesBB |= this->pos->whitePieces[i];
-        this->pos->blackPiecesBB |= this->pos->blackPieces[i];
+        this->pos->BlackPiecesBB |= this->pos->blackPieces[i];
     }
     this->pos->AllPiecesBB = this->pos->WhitePiecesBB | this->pos->BlackPiecesBB;
 
