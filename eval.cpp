@@ -9,22 +9,6 @@ int piece_values[6] = {1,0,5,1,1,9};
 //if king
 int middle_values[4] = {35,36,27,28};
 
-int evaluate(Board *board) {
-    Board b = *board;
-    if(b.isDrawn()) {
-        return 0;
-    } else if(b.isKingInCenter() || b.isCheckmate()) {
-        if(b::pos->whiteToMove()) {
-            //black won?
-            return -INT_MAX;
-        } else {
-            //white won?
-            return INT_MIN;
-        }
-    }
-
-    int material = material_eval(b.prevPos);
-}
 
 int material_eval(Position *p) {
     int white = 0;
@@ -37,4 +21,21 @@ int material_eval(Position *p) {
         black += popcnt(black_pieces);
     }
     return white - black;
+}
+
+
+int evaluate(Board *board) {
+    if(board->isDrawn()) {
+        return 0;
+    } else if(board->isKingInCenter() || board->isCheckmate()) {
+        if(board->pos->whiteToMove) {
+            //black won?
+            return -INT_MAX;
+        } else {
+            //white won?
+            return INT_MIN;
+        }
+    }
+
+    int material = material_eval(board->pos);
 }

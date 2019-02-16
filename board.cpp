@@ -3,6 +3,7 @@
 #include "move.h"
 #include "types.h"
 #include <string.h>
+#include <sstream>
 
 Position allPos[MAX_MOVES];
 
@@ -21,7 +22,7 @@ void Board::makeNullMove(){
 
 
     //TODO update zobrist
-    newPos->whiteToMove!=pos->whiteToMove;   
+    newPos->whiteToMove!=pos->whiteToMove;
     pos=newPos;
 }
 
@@ -40,7 +41,7 @@ void Board::makeMove(Move move){
 
     //Setting up the move
     moverPieces[pieceToMove] =  moverPieces[pieceToMove] & ~squareMasks[from]; //setting the bit of where the moving piece came from to 0
-    
+
     for (U8 pieceTypeInd = 0; pieceTypeInd < 6; pieceTypeInd++){ //looping through types of pieces on the opponent side
         opponentPieces[pieceTypeInd] = opponentPieces[pieceToMove] & ~squareMasks[to]; //setting the bit for that square to 0
     }
@@ -57,7 +58,7 @@ void Board::makeMove(Move move){
             break;
 
         case CASTLE:
-            
+
             moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
             break;
 
@@ -67,5 +68,6 @@ void Board::makeMove(Move move){
 }
 
 bool Board::parseFen(std::string fen){
-    
+    std::string token;
+    std::istringstream ss(fen);
 }
