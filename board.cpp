@@ -14,8 +14,13 @@ void Board::makeNullMove(){
     Position * newPos = &allPos[pos->moveNumber+1];
     memcpy(newPos,pos,sizeof(Position));
 
-    newPos->moveNumber+=1;
-    newPos->fiftyMoveRule+=1;
     newPos->enPassantLoc=NO_ENPASSANT;
     newPos->prevPos=pos;
+    newPos->moveNumber+=1;
+    newPos->fiftyMoveRule+=1;
+
+
+    //TODO update zobrist
+    newPos->whiteToMove!=pos->whiteToMove;   
 }
+

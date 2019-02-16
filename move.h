@@ -24,10 +24,10 @@ constexpr Move createMove(U8 from, U8 to, PieceType pieceMoved){
 }
 
 constexpr Move createMove(U8 from, U8 to, PieceType pieceMoved, MoveType moveType, PieceType promoteTo){
-    return (promoteTo<<17)+(moveType<<15)+(pieceMoved<<16)+(from<<8)+to;
+    return (promoteTo<<17)+(moveType<<15)+(pieceMoved<<12)+(from<<6)+to;
 }
 
-constexpr U8 dest_sq(Move move){
+constexpr U8 from_sq(Move move){
     return (move>>6)&7;
 }
 
