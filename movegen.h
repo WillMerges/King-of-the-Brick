@@ -1,6 +1,6 @@
 #ifndef MOVEGEN_H_INCLUDED
 #define MOVEGEN_H_INCLUDED
-#include "type.h"
+#include "types.h"
 #include "move.h" //For moves
 #include "board.h"//For boardinfo
 
