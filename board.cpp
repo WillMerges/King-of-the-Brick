@@ -4,6 +4,7 @@
 #include "types.h"
 #include <string.h>
 #include <sstream>
+#include <stdlib.h>
 
 Position allPos[MAX_MOVES];
 
@@ -174,7 +175,22 @@ bool Board::parseFen(std::string fen){
         if(i==0) {
             pos->whiteToMove=((*(cstr)=='w'));
         } else if(i==1) {
-
+            this->pos->whiteKingCastle=(strstr(cstr,"K") 	!=0?1:0);
+            this->pos->whiteQueenCastle=(strstr(cstr,"Q")!=0?1:0);
+            this->pos->blackKingCastle=(strstr(cstr,"k")!=0?1:0);
+            this->pos->blackQueenCastle=(strstr(cstr,"q")!=0?1:0);
+        } else if(i==3) {
+            this->pos->fiftyMoveRule = atoi(substr.c_str());
+        } else if(i==4) {
+            this->pos->moveNumber = atoi(substr.c_str())*2-1;
+            if(!this->pos->whiteToMove) {
+                this->pos->moveNumber++;
+            }
         }
+        i++;
     }
+    if(this->pos->moveNumber > MAX_MOVECOUNT) {
+        this->moveNumber = 1;
+    }
+    return true;
 }
