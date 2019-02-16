@@ -19,10 +19,10 @@ U8 getSquare(U8 rank, U8 file){
 
 void initBBHelpers(){
     for(int i = 0; i < 64; i++){
-        getSquare[i] = (1ULL << i);
+        squareMasks[i] = (1ULL << i);
     }
     for(int i = 0; i < 64; i++){
-        rankMasks[getRank(i)] |= getSquare[i];
-		fileMasks[getFile(i)] |= getSquare[i];
+        rankMasks[getRank(i)] |= squareMasks[i];
+		fileMasks[getFile(i)] |= squareMasks[i];
     }
 }

@@ -43,6 +43,7 @@ class Board{
         bool parseFen(std::string fen);
         Position * getCurPos();
         Position * pos;
+        std::string getFen();
 };
 
 const int MAX_MOVES=1000;

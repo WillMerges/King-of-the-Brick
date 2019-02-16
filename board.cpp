@@ -29,6 +29,6 @@ Position * Board::getCurPos(){
     return pos;
 }
 
-void Board::parseFen(std::string fen){
+bool Board::parseFen(std::string fen){
     
 }
