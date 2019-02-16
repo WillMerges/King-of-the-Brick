@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sstream>
 #include <stdlib.h>
+#include "bitboard.h"
 
 Position allPos[MAX_MOVES];
 
@@ -18,6 +19,7 @@ bool Board::isOwnKingInCheck(){
 	else
 		return isSquareAttacked(pos, pos -> blackPieces[KING],false);
 }
+
 void Board::makeNullMove(){
     Position * newPos = &allPos[pos->moveNumber+1];
     memcpy(newPos,pos,sizeof(Position));
