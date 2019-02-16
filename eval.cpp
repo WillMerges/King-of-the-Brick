@@ -1,9 +1,10 @@
 #include "eval.h"
 #include "types.h"
+#include "bitboard.h"
 #include <limits.h>
 
-//Pawn, King, Ring, Knight, Bishop, Queen
-int piece_values[6] = {0,0,0,0,0,0};
+//Pawn, King, Rook, Knight, Bishop, Queen
+int piece_values[6] = {1,0,5,1,1,9};
 
 //if king
 int middle_values[4] = {35,36,27,28};
@@ -31,16 +32,9 @@ int material_eval(Position *p) {
     for(int i=0; i<NUM_PIECE_TYPES; i++) {
         U64 white_pieces = p->whitePieces[i];
         U64 black_pieces = p->blackPieces[i];
-        for(int j=0; j<64; j++) {
-            int piecew = white_pieces[j];
-            int pieceb = black_pieces[j];
-            if(piecew) {
-                white += piece_values[i];
-            } if(pieceb) {
-                black += piece_values[i];
-            }
-            whitePieces /= 10;
-        }
+
+        white += popcnt(white_pieces);
+        black += popcnt(black_pieces);
     }
     return white - black;
 }
