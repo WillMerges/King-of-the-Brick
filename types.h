@@ -17,6 +17,7 @@ enum PieceType{
     KNIGHT=3,
     BISHOP=4,
     QUEEN=5,
+	EMPTY=6
 };
 
 typedef struct {

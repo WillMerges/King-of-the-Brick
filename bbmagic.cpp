@@ -110,11 +110,11 @@ U32 transform(U64 b, U64 magic, U8 bits) {
 }
 
 
-bool isSquareAttacked(BoardInfo* b, U64 square, bool doesBlackAttackSquare) {
+bool isSquareAttacked(Position* b, U64 square, bool doesBlackAttackSquare) {
 	return isIndexAttacked(b, trailingZeroCount(square), doesBlackAttackSquare);
 }
 //Not do whitePiecesAttack square.
-bool isIndexAttacked(BoardInfo* b, U8 i, bool whiteToMove) {
+bool isIndexAttacked(Position* b, U8 i, bool whiteToMove) {
 	if (i < 0 || i > 63)
 		return false;
 	U64 others = (whiteToMove ? b->BlackPiecesBB : b->WhitePiecesBB);
@@ -141,7 +141,7 @@ bool isIndexAttacked(BoardInfo* b, U8 i, bool whiteToMove) {
 	return false;
 }
 
-U64 getIndexAttacks(BoardInfo* b, int i) {
+U64 getIndexAttacks(Position* b, int i) {
 	if (i < 0 || i > 63)
 		return 0;
 	U64 all = b->AllPiecesBB;
@@ -158,11 +158,11 @@ U64 getOpponentXrays(BoardInfo * b, int loc, bool considerWhitePieces){
 	return getXrayAttacks(b, loc, considerWhitePieces ? b->WhitePiecesBB : b->BlackPiecesBB);
 }*/
 
-U64 getXrayAttacks(BoardInfo* b, int i) {
+U64 getXrayAttacks(Position* b, int i) {
 	return getXrayAttacks(b, i, b->AllPiecesBB);
 }
 
-U64 getXrayAttacks(BoardInfo* b, int i, U64 all) {
+U64 getXrayAttacks(Position* b, int i, U64 all) {
 	if (i < 0 || i > 63)
 		return 0;
 	return ( (getRookAttacks(i, all) & ( (b->whitePieces[ROOK] | b->blackPieces[ROOK]) | (b->whitePieces[QUEEN] | b->blackPieces[QUEEN]))) | (getBishopAttacks(
@@ -170,12 +170,12 @@ U64 getXrayAttacks(BoardInfo* b, int i, U64 all) {
 			& all;
 }
 
-U64 getXrayAttacksSlidings(BoardInfo* b, int i, U64 all);
-U64 getXrayAttacksSliding(BoardInfo* b, int i) {
+U64 getXrayAttacksSlidings(Position* b, int i, U64 all);
+U64 getXrayAttacksSliding(Position* b, int i) {
 	return getXrayAttacksSlidings(b, i, b->AllPiecesBB);
 }
 
-U64 getXrayAttacksSlidings(BoardInfo* b, int i, U64 all) {
+U64 getXrayAttacksSlidings(Position* b, int i, U64 all) {
 	if (i < 0 || i > 63)
 		return 0;
 	
