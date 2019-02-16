@@ -1,7 +1,8 @@
 #include "board.h"
 #include <string>
-#include "types.h"
 #include "move.h"
+#include "types.h"
+
 #include <string.h>
 
 Position allPos[MAX_MOVES];

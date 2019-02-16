@@ -10,13 +10,13 @@ typedef uint8_t U8;
 typedef uint16_t U16;
 typedef uint32_t U32;
 
-enum PieceTypes{
+enum PieceType{
     PAWN=0,
     KING=1,
     ROOK=2,
     KNIGHT=3,
     BISHOP=4,
-    QUEEN=5
+    QUEEN=5,
 };
 
 typedef struct {

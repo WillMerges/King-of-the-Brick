@@ -3,6 +3,7 @@
 #include "types.h"
 #include "bitboard.h"
 #include "move.h"
+#include <string>
 const int NUM_PIECE_TYPES=6;
 
 struct Position{
