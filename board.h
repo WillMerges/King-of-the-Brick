@@ -19,11 +19,12 @@ typedef struct{
     //Move lastMove;
 } Position;
 
-namespace Board{
+class Board{
     void makeMove(Move move);
     
     bool isDrawn();
     bool isGameOver();
-
+    bool parseFen(std::string fen);
+    
 }
 #endif
