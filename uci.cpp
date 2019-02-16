@@ -1,10 +1,21 @@
 #include <iostream>
 #include <string>
+#include <istringstream>
+#include "bitboard.h"
+#include "board.h"
+#include "types.h"
 
-std::string get_token() {
+
+
+Config zero_config() {
+	c = Config = {0};
+	return c;
+}
+
+std::string get_tokens() {
 	std::string token;
 	getline(std::cin, token);
-	return token;	
+	return token;
 }
 
 void handle_token(int* running) {
@@ -13,13 +24,15 @@ void handle_token(int* running) {
 
 	if(!token.compare("uci")) {
 		std::cout << "King of the Brick Chess Engine" << std::endl;
-		std::cout << "uciok" << std::endl << std::endl;	
+		std::cout << "uciok" << std::endl << std::endl;
 	} else if(!token.compare("go")) {
-		
+
 	} else if(!token.compare("position")) {
-	
+
 	} else if(!token.compare("perf")) {
-	
+
+	} else if (!toke.compare("ucinewgame") {
+		std::cout << "> ";
 	} else if(!token.compare("quit")) {
 		std::cout << "goodbye";
 		std:: cout << std::endl;
@@ -33,5 +46,3 @@ int main(int argc, char** argv) {
 		handle_token(&running);
 	}
 }
-
-

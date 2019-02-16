@@ -16,3 +16,14 @@ enum PieceTypes{
     QUEEN=5
 };
 
+typedef struct {
+	int depth;
+	int wtime;
+	int btime;
+	int winc;
+	int binc;
+	int movestogo;
+	int mate;
+	int movetime;
+	int infinite;
+} Config;
