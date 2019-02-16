@@ -1,4 +1,6 @@
-#include <types.h>
+#ifndef BITBOARD_H_INCLUDED
+#define BITBOARD_H_INCLUDED
+#include "types.h"
 
 typedef U64 Bitboard;
 
@@ -8,4 +10,6 @@ U8 popcnt(U64);
 
 U8 getSquare(U8 rank, U8 file);
 
-char[3] getSquareAsAlgebraicLoc(U8 sq);
+//char[3] getSquareAsAlgebraicLoc(U8 sq);
+
+#endif

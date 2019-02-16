@@ -1,11 +1,14 @@
+#ifndef TYPES_H_INCLUDED
+#define TYPES_H_INCLUDED
 #include <stdint.h>
 #include <stdbool.h>
 
 typedef uint64_t U64;
 typedef int64_t S64;
-typedef int8t_t S8;
-typedef uint8_t U8
-
+typedef int8_t S8;
+typedef uint8_t U8;
+typedef uint16_t U16;
+typedef uint32_t U32;
 
 enum PieceTypes{
     PAWN=0,
@@ -27,3 +30,5 @@ typedef struct {
 	int movetime;
 	int infinite;
 } Config;
+
+#endif

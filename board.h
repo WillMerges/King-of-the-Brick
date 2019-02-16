@@ -1,8 +1,11 @@
-#ifdef BOARD_H_INCLUDED
+#ifndef BOARD_H_INCLUDED
 #define BOARD_H_INCLUDED
 #include "types.h"
 #include "bitboard.h"
-typedef struct{
+#include "move.h"
+const int NUM_PIECE_TYPES=6;
+
+struct Position{
     U64 zobrist;
 
     U16 moveNumber;
@@ -23,7 +26,7 @@ typedef struct{
     Bitboard AllPiecesBB;
     //Move lastMove;
     Position * prevPos;
-} Position;
+};
 
 class Board{
     public:
@@ -38,7 +41,7 @@ class Board{
 
         bool parseFen(std::string fen);
         Position * pos;
-}
+};
 
-constexpr MAX_MOVES=2000;
+const int MAX_MOVES=2000;
 #endif

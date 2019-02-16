@@ -1,3 +1,5 @@
+#ifndef MOVE_H_INCLUDED
+#define MOVE_H_INCLUDED
 #include "types.h"
 
 //The move structure looks like the following.
@@ -15,7 +17,7 @@ enum MoveType{
     PROMOTION=1,
     CASTLE=2,
     ENPASSANT=3
-}
+};
 
 constexpr Move makeMove(U8 from, U8 to, PieceType pieceMoved){
     return (pieceMoved<<12)+(from<<6)+to;
@@ -44,3 +46,5 @@ constexpr MoveType get_move_type(Move move){
 constexpr PieceType get_promotion_type(Move move){
     return PieceType((move>>17)&7);
 }
+
+#endif
