@@ -22,5 +22,13 @@ void Board::makeNullMove(){
 
     //TODO update zobrist
     newPos->whiteToMove!=pos->whiteToMove;   
+    pos=newPos;
 }
 
+Position * Board::getCurPos(){
+    return pos;
+}
+
+void Board::parseFen(std::string fen){
+    
+}
