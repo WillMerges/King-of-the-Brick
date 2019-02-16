@@ -147,9 +147,7 @@ U8 getAllLegalMoves(Board* b, ExtMove list[]){
 			}
 		}
 	}
-
 	return j;
-
 }
 
 U8 getWhiteKingMoves(Position * b, ExtMove moves[], int index) {
@@ -172,7 +170,7 @@ U8 getWhiteKingMoves(Position * b, ExtMove moves[], int index) {
 	if (b->whiteKingCastle) {
 		if ( (king << 1 & b->AllPiecesBB) == 0L
 				&& (king << 2 & b->AllPiecesBB) == 0L) {
-			if ( (king << 3 & b->WhiteRookBB) != 0L) {
+			if ( (king << 3 & b->whitePieces[ROOK]) != 0L) {
 				if (!isSquareAttacked(b, king, true)
 						&& !isSquareAttacked(b, king << 1,
 								true)
@@ -238,7 +236,7 @@ U8 getBlackKingMoves(Position* b, ExtMove moves[], int index) {
 	}
 	
 	if (b->blackQueenCastle) {
-		if ( (b->BlackKingBB >> 1 & b->AllPiecesBB) == 0L
+		if ( (b->blackPieces[KING] >> 1 & b->AllPiecesBB) == 0L
 				&& (b->blackPieces[KING] >> 2 & b->AllPiecesBB) == 0L
 				&& (b->blackPieces[KING] >> 3 & b->AllPiecesBB) == 0L) {
 			if ( (b->blackPieces[KING] >> 4 & b->blackPieces[ROOK]) != 0L) {
@@ -312,9 +310,9 @@ U8 getWhitePawnMoves(Position * b, ExtMove moves[], int listIdx){
 		U8 fromLoc = trailingZeroCount(fromBB);
 		
 		//If pawn is on seventh rank
-		if((fromBB & maskRank[RANK_7]) != 0){
+		if((fromBB & rankMasks[RANK_7]) != 0){
 			//If pawn is not on A file, and there is a piece to capture upper left 
-			if(((fromBB & maskFile[FILE_A]) == 0) &&  (((fromBB << 7 ) & (b->BlackPiecesBB)) != 0)){
+			if(((fromBB & fileMasks[FILE_A]) == 0) &&  (((fromBB << 7 ) & (b->BlackPiecesBB)) != 0)){
 				U8 destLoc = trailingZeroCount(fromBB << 7);
 				Move m = createMove(fromLoc, destLoc, PAWN, KNIGHT, PROMOTION);
 				addMove(m,moves,listIdx+moveGenCount,true,b);
@@ -336,7 +334,7 @@ U8 getWhitePawnMoves(Position * b, ExtMove moves[], int listIdx){
 				moveGenCount++;
 			}
 			//If pawn not on H file, and there is a piece to capture upper right
-			if(((fromBB & maskFile[FILE_H]) ==0) && (((fromBB <<9) & (b->BlackPiecesBB)) != 0)){
+			if(((fromBB & fileMasks[FILE_H]) ==0) && (((fromBB <<9) & (b->BlackPiecesBB)) != 0)){
 				U8 destLoc = trailingZeroCount(fromBB << 9);
 				Move m = createMove(fromLoc, destLoc, PAWN, KNIGHT, PROMOTION);
 				//list[listIdx+moveGenCount].move = m;
@@ -380,7 +378,7 @@ U8 getWhitePawnMoves(Position * b, ExtMove moves[], int listIdx){
 			//Pawn not on seventh rank
 			
 			//Leftwards captures.
-			if(((fromBB & maskFile[FILE_A]) == 0) && ((((fromBB << 7) & (b->BlackPiecesBB)) != 0) || (trailingZeroCount(fromBB << 7) == (b->enPassantLoc)))){
+			if(((fromBB & fileMasks[FILE_A]) == 0) && ((((fromBB << 7) & (b->BlackPiecesBB)) != 0) || (trailingZeroCount(fromBB << 7) == (b->enPassantLoc)))){
 				U8 destLoc = trailingZeroCount(fromBB << 7);
 				Move m;
 				if(destLoc == (b->enPassantLoc)){
@@ -394,7 +392,7 @@ U8 getWhitePawnMoves(Position * b, ExtMove moves[], int listIdx){
 			}
 			
 			//Rightwards captures
-			if(((fromBB & maskFile[FILE_H]) == 0) && ((((fromBB << 9) & (b->BlackPiecesBB)) != 0) || (trailingZeroCount(fromBB << 9) == (b->enPassantLoc)))){
+			if(((fromBB & fileMasks[FILE_H]) == 0) && ((((fromBB << 9) & (b->BlackPiecesBB)) != 0) || (trailingZeroCount(fromBB << 9) == (b->enPassantLoc)))){
 				U8 destLoc = trailingZeroCount(fromBB << 9);
 				Move m;
 				if(destLoc == (b->enPassantLoc)){
@@ -418,7 +416,7 @@ U8 getWhitePawnMoves(Position * b, ExtMove moves[], int listIdx){
 				moveGenCount++;
 			}
 			//2 Squares
-			if(((fromBB & maskRank[RANK_2]) != 0) && nextSquareClear && (((fromBB << 16) & (b->AllPiecesBB)) == 0)){
+			if(((fromBB & rankMasks[RANK_2]) != 0) && nextSquareClear && (((fromBB << 16) & (b->AllPiecesBB)) == 0)){
 				U8 destLoc = trailingZeroCount(fromBB << 16);
 				m = createMove(fromLoc, destLoc, PAWN);
 				addMove(m,moves,listIdx+moveGenCount,true,b);
@@ -441,9 +439,9 @@ U8 getBlackPawnMoves(Position * b, ExtMove moves[], int listIdx){
 		U8 fromLoc = trailingZeroCount(fromBB);
 		
 		//If pawn is on second rank
-		if((fromBB & maskRank[RANK_2]) != 0){
+		if((fromBB & rankMasks[RANK_2]) != 0){
 			//If pawn is not on A file, and there is a piece to capture upper left 
-			if(((fromBB & maskFile[FILE_H]) == 0) &&  (((fromBB >> 7) & (b->WhitePiecesBB)) != 0)){
+			if(((fromBB & fileMasks[FILE_H]) == 0) &&  (((fromBB >> 7) & (b->WhitePiecesBB)) != 0)){
 				U8 destLoc = trailingZeroCount(fromBB >> 7);
 				Move m = createMove(fromLoc, destLoc, PAWN, KNIGHT, PROMOTION);
 				addMove(m,moves,listIdx+moveGenCount,false,b);
@@ -463,7 +461,7 @@ U8 getBlackPawnMoves(Position * b, ExtMove moves[], int listIdx){
 				moveGenCount++;
 			}
 			//If pawn not on H file, and there is a piece to capture upper right
-			if(((fromBB & maskFile[FILE_A]) ==0) && (((fromBB >>9) & (b->WhitePiecesBB)) != 0)){
+			if(((fromBB & fileMasks[FILE_A]) ==0) && (((fromBB >>9) & (b->WhitePiecesBB)) != 0)){
 				U8 destLoc = trailingZeroCount(fromBB >>9);
 				Move m = createMove(fromLoc, destLoc, PAWN, KNIGHT, PROMOTION);
 				addMove(m,moves,listIdx+moveGenCount,false,b);
@@ -506,7 +504,7 @@ U8 getBlackPawnMoves(Position * b, ExtMove moves[], int listIdx){
 			//Pawn not on seventh rank
 			
 			//Leftwards captures.
-			if(((fromBB & maskFile[FILE_H]) == 0) && ((((fromBB >> 7) & (b->WhitePiecesBB)) != 0) || (trailingZeroCount(fromBB >> 7) == (b->enPassantLoc)))){
+			if(((fromBB & fileMasks[FILE_H]) == 0) && ((((fromBB >> 7) & (b->WhitePiecesBB)) != 0) || (trailingZeroCount(fromBB >> 7) == (b->enPassantLoc)))){
 				U8 destLoc = trailingZeroCount(fromBB >> 7);
 				Move m;
 				if(destLoc == (b->enPassantLoc)){
@@ -520,7 +518,7 @@ U8 getBlackPawnMoves(Position * b, ExtMove moves[], int listIdx){
 			}
 			
 			//Rightwards captures
-			if(((fromBB & maskFile[FILE_A]) == 0) && ((((fromBB >> 9) & (b->WhitePiecesBB)) != 0) || (trailingZeroCount(fromBB >> 9) == (b->enPassantLoc)))){
+			if(((fromBB & fileMasks[FILE_A]) == 0) && ((((fromBB >> 9) & (b->WhitePiecesBB)) != 0) || (trailingZeroCount(fromBB >> 9) == (b->enPassantLoc)))){
 				U8 destLoc = trailingZeroCount(fromBB >> 9);
 				Move m;
 				if(destLoc == (b->enPassantLoc)){
@@ -544,7 +542,7 @@ U8 getBlackPawnMoves(Position * b, ExtMove moves[], int listIdx){
 				moveGenCount++;
 			}
 			//2 Squares
-			if(((fromBB & maskRank[RANK_7]) != 0) && nextSquareClear && (((fromBB >> 16) & (b->AllPiecesBB)) == 0)){
+			if(((fromBB & rankMasks[RANK_7]) != 0) && nextSquareClear && (((fromBB >> 16) & (b->AllPiecesBB)) == 0)){
 				Move m;
 				U8 destLoc = trailingZeroCount(fromBB >> 16);
 				m = createMove(fromLoc, destLoc, PAWN);
@@ -583,7 +581,7 @@ U8 getWhiteBishopMoves(Position * b, ExtMove moves[], int index) {
 	}
 	return num_moves_generated;
 }
-U8 getBlackBishopMoves(BoardInfo* b,ExtMove moves[], int index) {
+U8 getBlackBishopMoves(Position* b,ExtMove moves[], int index) {
 	U64 bishops = b->blackPieces[BISHOP];
 	U8 num_moves_generated = 0;
 	
