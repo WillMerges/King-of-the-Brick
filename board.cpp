@@ -29,6 +29,18 @@ Position * Board::getCurPos(){
     return pos;
 }
 
+void Board::makeMove(Move move){
+    PieceType pieceToMove = get_piece_moved(move);
+    U8 from = from_sq(move);
+    U8 to = to_sq(move);
+
+    Bitboard * moverPieces = pos->whiteToMove ? pos->whitePieces : pos->blackPieces; //getting the pieces of who is moving
+    moverPieces[pieceToMove] =  moverPieces[pieceToMove] & ~squareMasks[from]; //setting the bit of where the moving piece came from to 0
+    if (get_move_type(move) == PROMOTION){
+        
+    }
+}
+
 bool Board::parseFen(std::string fen){
     
 }
