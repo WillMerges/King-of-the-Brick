@@ -41,8 +41,10 @@ class Board{
         bool isKingInCenter();
 
         bool parseFen(std::string fen);
+        Position * getCurPos();
         Position * pos;
+        std::string getFen();
 };
 
-const int MAX_MOVES=2000;
+const int MAX_MOVES=1000;
 #endif

@@ -17,3 +17,12 @@ U8 getSquare(U8 rank, U8 file){
     return file+rank*8;
 }
 
+void initBBHelpers(){
+    for(int i = 0; i < 64; i++){
+        squareMasks[i] = (1ULL << i);
+    }
+    for(int i = 0; i < 64; i++){
+        rankMasks[getRank(i)] |= squareMasks[i];
+		fileMasks[getFile(i)] |= squareMasks[i];
+    }
+}

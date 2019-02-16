@@ -10,6 +10,8 @@ U8 popcnt(U64);
 
 U8 getSquare(U8 rank, U8 file);
 
-//char[3] getSquareAsAlgebraicLoc(U8 sq);
-
+extern U64 squareMasks[64];
+extern U64 rankMasks[8];
+extern U64 fileMasks[8];
+void initBBHelpers();
 #endif
