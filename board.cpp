@@ -12,6 +12,12 @@ void Board::undoMove(){
     pos=pos->prevPos;
 }
 
+bool Board::isOwnKingInCheck(){
+	if(pos->whiteToMove)
+		return isSquareAttacked(pos, pos -> whitePieces[KING],true);
+	else
+		return isSquareAttacked(pos, pos -> blackPieces[KING],false);
+}
 void Board::makeNullMove(){
     Position * newPos = &allPos[pos->moveNumber+1];
     memcpy(newPos,pos,sizeof(Position));
