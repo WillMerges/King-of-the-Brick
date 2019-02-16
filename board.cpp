@@ -122,7 +122,7 @@ bool Board::parseFen(std::string fen){
 
         while(*row != '\0') {
             if(*row<'0' && *row >'9') {
-                U64 sq = getSquare(right, up);
+                U64 sq = squareMasks[getSquare(right, up)];
                 if(*row == 'p') {
                     this->pos->blackPieces[PAWN] |= sq;
                 } else if(*row == 'k') {
@@ -189,8 +189,8 @@ bool Board::parseFen(std::string fen){
         }
         i++;
     }
-    if(this->pos->moveNumber > MAX_MOVECOUNT) {
-        this->moveNumber = 1;
+    if(this->pos->moveNumber > MAX_MOVES) {
+        this->pos->moveNumber = 1;
     }
     return true;
 }
