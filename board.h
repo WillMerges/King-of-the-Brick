@@ -40,6 +40,8 @@ class Board{
         bool isCheckmate();
         bool isKingInCenter();
 
+        bool legal();
+        
         bool parseFen(std::string fen);
         Position * getCurPos();
         Position * pos;
