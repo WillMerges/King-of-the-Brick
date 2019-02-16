@@ -14,4 +14,6 @@ extern U64 squareMasks[64];
 extern U64 rankMasks[8];
 extern U64 fileMasks[8];
 void initBBHelpers();
+
+int trailingZeroCount(U64 bb);
 #endif

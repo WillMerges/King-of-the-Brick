@@ -15,10 +15,10 @@ struct Position{
     U8 enPassantLoc;
     U8 fiftyMoveRule;
 
-    bool canWhiteQueensideCastle;
-    bool canWhiteKingsideCastle;
-    bool canBlackQueensideCastle;
-    bool canBlackKingsideCastle;
+    bool whiteQueenCastle;
+    bool whiteKingCastle;
+    bool blackQueenCastle;
+    bool blackKingCastle;
 
     Bitboard whitePieces[NUM_PIECE_TYPES];
     Bitboard blackPieces[NUM_PIECE_TYPES];
