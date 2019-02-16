@@ -1,8 +1,7 @@
-#include "types.h"
-#include "board.h"
+#ifndef EVAL_DEF
+#define EVAL_DEF
 
-#ifndef
-#define EVAL
+#include "board.h"
 
 namespace Eval {
     int evaluate(Board *board);
