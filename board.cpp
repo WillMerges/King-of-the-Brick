@@ -34,8 +34,8 @@ void Board::makeMove(Move move){
     U8 from = from_sq(move);
     U8 to = to_sq(move);
 
-    moverPieces = {}
-    pos->whitePieces[pieceToMove] = pos->whitePieces[pieceToMove] & ~squareMasks[from];
+    Bitboard * moverPieces = pos->whiteToMove ? pos->whitePieces : pos->blackPieces; //getting the pieces of who is moving
+    moverPieces[pieceToMove] =  moverPieces[pieceToMove] & ~squareMasks[from]; //setting the bit of where the moving piece came from to 0
     if (get_move_type(move) == PROMOTION){
         
     }
