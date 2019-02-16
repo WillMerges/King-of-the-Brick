@@ -115,9 +115,9 @@ bool Board::parseFen(std::string fen){
     int up = 7; //start at corner
     int right;
 
-    while(std::getLine(ss, rowstr, '/')) {
+    while(std::getline(ss, rowstr, '/')) {
         right = 0;
-        char *row = rowstr.c_str();
+        const char *row = rowstr.c_str();
 
         while(*row != '\0') {
             if(*row<'0' && *row >'9') {
@@ -165,12 +165,12 @@ bool Board::parseFen(std::string fen){
 
     std::istringstream endstr(rowstr);
     std::string substr;
-    std::getLine(endstr, substr, ' ');
+    std::getline(endstr, substr, ' ');
 
 
     int i = 0;
-    while(std::getLine(endstr, substr, ' ')) {
-        char* cstr = substr.c_str();
+    while(std::getline(endstr, substr, ' ')) {
+        const char* cstr = substr.c_str();
         if(i==0) {
             pos->whiteToMove=((*(cstr)=='w'));
         } else if(i==1) {
