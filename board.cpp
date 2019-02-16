@@ -29,6 +29,18 @@ Position * Board::getCurPos(){
     return pos;
 }
 
-void Board::parseFen(std::string fen){
+void Board::makeMove(Move move){
+    PieceType pieceToMove = get_piece_moved(move);
+    U8 from = from_sq(move);
+    U8 to = to_sq(move);
+
+    moverPieces = {}
+    pos->whitePieces[pieceToMove] = pos->whitePieces[pieceToMove] & ~squareMasks[from];
+    if (get_move_type(move) == PROMOTION){
+        
+    }
+}
+
+bool Board::parseFen(std::string fen){
     
 }
