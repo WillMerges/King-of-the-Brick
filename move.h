@@ -23,7 +23,7 @@ constexpr Move createMove(U8 from, U8 to, PieceType pieceMoved){
     return (pieceMoved<<12)+(from<<6)+to;
 }
 
-constexpr Move createMove(U8 from, U8 to, PieceType pieceMoved, MoveType moveType, PieceType promoteTo){
+constexpr Move createMove(U8 from, U8 to, PieceType pieceMoved, PieceType promoteTo, MoveType moveType){
     return (promoteTo<<17)+(moveType<<15)+(pieceMoved<<12)+(from<<6)+to;
 }
 

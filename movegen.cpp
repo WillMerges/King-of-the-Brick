@@ -136,7 +136,7 @@ U8 getAllLegalMoves(Board* b, ExtMove list[]){
 		}
 	}else{
 		for (int i = 0; i < count; i++) {
-			if(mask & squareMasks[from_sq(list[i])] || get_piece_moved(list[i]) == KING){
+			if(mask & squareMasks[from_sq(list[i].move)] || get_piece_moved(list[i].move) == KING){
 				b->makeMove(list[i].move);
 				if(b->legal()){
 					list[j++] = list[i];
