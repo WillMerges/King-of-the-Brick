@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <istringstream>
+#include <sstream>
 #include "bitboard.h"
 #include "board.h"
 #include "types.h"
@@ -18,9 +18,26 @@ std::string get_tokens() {
 	return token;
 }
 
+
+void position(stringstream ss) {
+	std::string token;
+	std::getline(ss, token, ' ');
+
+	if(!token.compare("fen")) {
+		//do stuff
+	}
+}
+
+
 void handle_token(int* running) {
 	std::cout << "> ";
-	std::string token = get_token();
+	std::string line = get_tokens();
+
+	std::istringstream ss(line);
+	std::string token;
+
+	std::getline(ss, token, ' ');
+
 
 	if(!token.compare("uci")) {
 		std::cout << "King of the Brick Chess Engine" << std::endl;
@@ -28,10 +45,10 @@ void handle_token(int* running) {
 	} else if(!token.compare("go")) {
 
 	} else if(!token.compare("position")) {
-
+		position(ss);
 	} else if(!token.compare("perf")) {
 
-	} else if (!toke.compare("ucinewgame") {
+	} else if (!token.compare("ucinewgame") {
 		std::cout << "> ";
 	} else if(!token.compare("quit")) {
 		std::cout << "goodbye";
