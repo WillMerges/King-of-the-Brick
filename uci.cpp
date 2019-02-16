@@ -5,7 +5,7 @@
 #include "board.h"
 #include "types.h"
 
-
+Board board;
 
 Config zero_config() {
  	Config c = {0};
@@ -20,12 +20,47 @@ std::string get_tokens() {
 
 
 void position(std::stringstream ss) {
+	//have a fenstring from the ss
+	//given this fenstring, make these moves ...
+
+
 	std::string token;
 	std::getline(ss, token, ' ');
 
-	if(!token.compare("fen")) {
-		//do stuff
+	std::string boardfen;
+	if(!token.compare("startpos")) {
+		boardfen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+	}else{
+		for(int i = 0; i < 6){
+			std::getline(ss, token, ' ');
+			boardfen.append(token);
+			boardfen.append(' ');
+		}
 	}
+	board.parseFen(boardfen);
+	
+	std::string move;
+	while(getline(ss, move, ' ')){
+		char* movestr = move.c_str();
+		
+		//convert move string to move object
+		U8 file1 = getFile(movestr[0] - 'a');
+		U8 rank1 = getRank(movestr[1] - '1');
+
+		U8 file2 = getFile(movestr[2] - 'a');
+		U8 rank2 = getRank(movestr[3] - '1');
+		
+		//if its a promotion
+		
+
+		//create
+		//board.makeMove();
+	}
+	//this is ben's line
+
+	int x;
+	(void) x;
+	
 }
 
 
