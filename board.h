@@ -42,6 +42,9 @@ class Board{
 
         bool legal();
 
+
+        bool isOwnKingInCheck();
+
         bool parseFen(std::string fen);
         Position * getCurPos();
         Position * pos;
@@ -49,3 +52,6 @@ class Board{
 };
 
 #endif
+
+
+
