@@ -8,15 +8,11 @@
 
 Position allPos[MAX_MOVES];
 
-bool isOwnKingInCheck(Position pos){
-
-	if(whiteToMove())
-		isSquareAttacked(pos, pos -> whitePieces[KING]);
+bool Board::isOwnKingInCheck(){
+	if(pos->whiteToMove)
+		return isSquareAttacked(pos, pos -> whitePieces[KING],true);
 	else
-		isSquareAttacked(pos, pos -> blackPieces[KING]);
-	
-	
-
+		return isSquareAttacked(pos, pos -> blackPieces[KING],false);
 }
 
 
