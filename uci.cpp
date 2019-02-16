@@ -8,7 +8,7 @@
 
 
 Config zero_config() {
-	c = Config = {0};
+ 	Config c = {0};
 	return c;
 }
 
@@ -19,7 +19,7 @@ std::string get_tokens() {
 }
 
 
-void position(stringstream ss) {
+void position(std::stringstream ss) {
 	std::string token;
 	std::getline(ss, token, ' ');
 
@@ -33,7 +33,7 @@ void handle_token(int* running) {
 	std::cout << "> ";
 	std::string line = get_tokens();
 
-	std::istringstream ss(line);
+	std::stringstream ss(line);
 	std::string token;
 
 	std::getline(ss, token, ' ');
@@ -45,10 +45,11 @@ void handle_token(int* running) {
 	} else if(!token.compare("go")) {
 
 	} else if(!token.compare("position")) {
-		position(ss);
+		//position(ss);
 	} else if(!token.compare("perf")) {
 
-	} else if (!token.compare("ucinewgame") {
+	} else if(!token.compare("ucinewgame")) {
+		//new stuff
 		std::cout << "> ";
 	} else if(!token.compare("quit")) {
 		std::cout << "goodbye";
