@@ -14,8 +14,8 @@ bool isOwnKingInCheck(Position pos){
 		isSquareAttacked(pos, pos -> whitePieces[KING]);
 	else
 		isSquareAttacked(pos, pos -> blackPieces[KING]);
-	
-	
+
+
 
 }
 
@@ -89,7 +89,7 @@ void Board::makeMove(Move move){
             }
             moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
             break;
-        
+
         case ENPASSANT:
             if (pos->whiteToMove){
                 opponentPieces
@@ -105,6 +105,326 @@ void Board::makeMove(Move move){
 }
 
 bool Board::parseFen(std::string fen){
-    std::string token;
+    std::string rowstr;
     std::istringstream ss(fen);
+
+    int up = 7; //start at corner
+    int right;
+
+    while(std::getLine(ss, rowstr, '/')) {
+        right = 0;
+        char *row = rowstr.c_str();
+
+        while(*row != '\0') {
+            if(*row<'0' && *row >'9') {
+                U64 sq = getSquare(row, up);
+                if(*row == 'p') {
+                    this->pos.blackPieces(PAWN);
+                } else if(*row == 'k') {
+                    this->pos.blackPieces(KING);
+                } else if(*row == 'r') {
+                    this->pos.blackPieces(ROOK);
+                } else if(*row == 'n') {
+                    this->pos.blackPieces(KNIGHT);
+                } else if(*row == 'b') {
+                    this->pos.blackPieces(BISHOP);
+                } else if(*row == 'q') {
+                    this->pos.blackPieces(QUEEN);
+                } else if(*row == 'P') {
+                    this->pos.whitePieces(PAWN);
+                } else if(*row == 'K') {
+                    this->pos.whitePieces(KING);
+                } else if(*row == 'R') {
+                    this->pos.whitePieces(ROOK);
+                } else if(*row == 'N') {
+                    this->pos.whitePieces(KNIGHT);
+                } else if(*row == 'B') {
+                    this->pos.whitePieces(BISHOP);
+                } else if(*row == 'Q') {
+                    this->pos.whitePieces(QUEEN);
+                } //else it's empty bool Board::parseFen(std::string fen){
+
+    std::string rowstr;
+
+    std::istringstream ss(fen);
+
+    int up = 7; //start at corner
+
+    int right;
+
+    while(std::getLine(ss, rowstr, '/')) {
+
+        right = 0;
+
+        char *row = rowstr.c_str();
+
+        while(*row != '\0') {
+
+            if(*row<'0' && *row >'9') {
+
+                U64 sq = getSquare(row, up);
+
+                if(*row == 'p') {
+
+                    this->pos.blackPieces(PAWN);
+
+                } else if(*row == 'k') {
+
+                    this->pos.blackPieces(KING);
+
+                } else if(*row == 'r') {
+
+                    this->pos.blackPieces(ROOK);
+
+                } else if(*row == 'n') {
+
+                    this->pos.blackPieces(KNIGHT);
+
+                } else if(*row == 'b') {
+
+                    this->pos.blackPieces(BISHOP);
+
+                } else if(*row == 'q') {
+
+                    this->pos.blackPieces(QUEEN);
+
+                } else if(*row == 'P') {
+
+                    this->pos.whitePieces(PAWN);
+
+                } else if(*row == 'K') {
+
+                    this->pos.whitePieces(KING);
+
+                } else if(*row == 'R') {
+
+                    this->pos.whitePieces(ROOK);
+
+                } else if(*row == 'N') {
+
+                    this->pos.whitePieces(KNIGHT);
+
+                } else if(*row == 'B') {
+
+                    this->pos.whitePieces(BISHOP);
+
+                } else if(*row == 'Q') {
+
+                    this->pos.whitePieces(QUEEN);
+
+                } //else it's empty probably
+
+                right++;
+
+            } else {
+
+                right += *row-'0'; //move over
+
+            }
+
+            row++; //increment the row
+
+        }
+
+        up--; //move down
+
+    }
+
+    for(int i=0; i<NUM_PIECE_TYPES; i++) {
+
+        this->pos.WhitePiecesBB |= this->pos.whitePieces[i];
+
+        this->pos.blackPiecesBB |= this->pos.blackPieces[i];
+
+    }
+
+    this->pos.AllPiecesBB = this->pos.WhitePiecesBB | this->pos.BlackPiecesBB;
+
+
+
+    std::istringstream endstr(rowstr);
+
+    std::string substr;
+
+    std::getLine(endstr, substr, ' ');
+bool Board::parseFen(std::string fen){
+
+    std::string rowstr;
+
+    std::istringstream ss(fen);
+
+    int up = 7; //start at corner
+
+    int right;
+
+    while(std::getLine(ss, rowstr, '/')) {
+
+        right = 0;
+
+        char *row = rowstr.c_str();
+
+        while(*row != '\0') {
+
+            if(*row<'0' && *row >'9') {
+
+                U64 sq = getSquare(row, up);
+
+                if(*row == 'p') {
+
+                    this->pos.blackPieces(PAWN);
+
+                } else if(*row == 'k') {
+
+                    this->pos.blackPieces(KING);
+
+                } else if(*row == 'r') {
+
+                    this->pos.blackPieces(ROOK);
+
+                } else if(*row == 'n') {
+
+                    this->pos.blackPieces(KNIGHT);
+
+                } else if(*row == 'b') {
+
+                    this->pos.blackPieces(BISHOP);
+
+                } else if(*row == 'q') {
+
+                    this->pos.blackPieces(QUEEN);
+
+                } else if(*row == 'P') {
+
+                    this->pos.whitePieces(PAWN);
+
+                } else if(*row == 'K') {
+
+                    this->pos.whitePieces(KING);
+
+                } else if(*row == 'R') {
+
+                    this->pos.whitePieces(ROOK);
+
+                } else if(*row == 'N') {
+
+                    this->pos.whitePieces(KNIGHT);
+
+                } else if(*row == 'B') {
+
+                    this->pos.whitePieces(BISHOP);
+
+                } else if(*row == 'Q') {
+
+                    this->pos.whitePieces(QUEEN);
+
+                } //else it's empty probably
+
+                right++;
+
+            } else {
+
+                right += *row-'0'; //move over
+
+            }
+
+            row++; //increment the row
+
+        }
+
+        up--; //move down
+
+    }
+
+    for(int i=0; i<NUM_PIECE_TYPES; i++) {
+
+        this->pos.WhitePiecesBB |= this->pos.whitePieces[i];
+
+        this->pos.blackPiecesBB |= this->pos.blackPieces[i];
+
+    }
+
+    this->pos.AllPiecesBB = this->pos.WhitePiecesBB | this->pos.BlackPiecesBB;
+
+
+
+    std::istringstream endstr(rowstr);
+
+    std::string substr;
+
+    std::getLine(endstr, substr, ' ');
+
+
+
+    int i = 0;
+
+    while(std::getLine(endstr, substr, ' ')) {
+
+        char* cstr = substr.c_str();
+
+        if(i==0) {
+
+            *pos.whiteToMove=((*(cstr)=='w'));
+
+        } else if(i==1) {
+
+
+
+        }
+
+    }
+
+}
+
+
+
+    int i = 0;
+
+    while(std::getLine(endstr, substr, ' ')) {
+
+        char* cstr = substr.c_str();
+
+        if(i==0) {
+
+            *pos.whiteToMove=((*(cstr)=='w'));
+
+        } else if(i==1) {
+
+
+
+        }
+
+    }
+
+}
+probably
+                right++;
+            } else {
+                right += *row-'0'; //move over
+            }
+            row++; //increment the row
+        }
+        up--; //move down
+    }
+
+    for(int i=0; i<NUM_PIECE_TYPES; i++) {
+        this->pos.WhitePiecesBB |= this->pos.whitePieces[i];
+        this->pos.blackPiecesBB |= this->pos.blackPieces[i];
+    }
+    this->pos.AllPiecesBB = this->pos.WhitePiecesBB | this->pos.BlackPiecesBB;
+
+
+    std::istringstream endstr(rowstr);
+    std::string substr;
+    std::getLine(endstr, substr, ' ');
+
+
+    int i = 0;
+    while(std::getLine(endstr, substr, ' ')) {
+        char* cstr = substr.c_str();
+        if(i==0) {
+            *pos.whiteToMove=((*(cstr)=='w'));
+        } else if(i==1) {
+
+        }
+    }
 }
