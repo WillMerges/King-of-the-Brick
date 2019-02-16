@@ -21,6 +21,8 @@ int evaluate(Board *board) {
             return INT_MIN;
         }
     }
+
+    int material = material_eval(b.prevPos);
 }
 
 int material_eval(Position *p) {
@@ -37,6 +39,7 @@ int material_eval(Position *p) {
             } if(pieceb) {
                 black += piece_values[i];
             }
+            whitePieces /= 10;
         }
     }
     return white - black;
