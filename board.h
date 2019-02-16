@@ -22,20 +22,22 @@ typedef struct{
     Bitboard BlackPiecesBB;
     Bitboard AllPiecesBB;
     //Move lastMove;
+    Position * prevPos;
 } Position;
 
 class Board{
-    void makeMove(Move move);
-    void undoMove();
-    void makeNullMove();
-    
-    bool isDrawn();
-    bool isGameOver();
-    bool isCheckmate();
-    bool isKingInCenter();
+    public:
+        void makeMove(Move move);
+        void undoMove();
+        void makeNullMove();
+        
+        bool isDrawn();
+        bool isGameOver();
+        bool isCheckmate();
+        bool isKingInCenter();
 
-    bool parseFen(std::string fen);
-
+        bool parseFen(std::string fen);
+        Position * pos;
 }
 
 constexpr MAX_MOVES=2000;
