@@ -431,8 +431,8 @@ U8 getWhitePawnMoves(Position * b, ExtMove moves[], int listIdx){
 }
 
 
-U8 getBlackPawnMoves(BoardInfo * b, ExtMove moves[], int listIdx){
-	U64 pawns = b->BlackPawnBB;
+U8 getBlackPawnMoves(Position * b, ExtMove moves[], int listIdx){
+	U64 pawns = b->blackPieces[PAWN];
 	int moveGenCount = 0;
 	
 	while(pawns != 0){
@@ -557,8 +557,8 @@ U8 getBlackPawnMoves(BoardInfo * b, ExtMove moves[], int listIdx){
 	return moveGenCount;
 }
 
-U8 getWhiteBishopMoves(BoardInfo * b, ExtMove moves[], int index) {
-	U64 bishops = b->WhiteBishopBB;
+U8 getWhiteBishopMoves(Position * b, ExtMove moves[], int index) {
+	U64 bishops = b->whitePieces[BISHOP];
 	U8 num_moves_generated = 0;
 	
 	while (bishops != 0L) {
@@ -583,7 +583,7 @@ U8 getWhiteBishopMoves(BoardInfo * b, ExtMove moves[], int index) {
 	return num_moves_generated;
 }
 U8 getBlackBishopMoves(BoardInfo* b,ExtMove moves[], int index) {
-	U64 bishops = b->BlackBishopBB;
+	U64 bishops = b->blackPieces[BISHOP];
 	U8 num_moves_generated = 0;
 	
 	while (bishops != 0L) {
@@ -607,8 +607,8 @@ U8 getBlackBishopMoves(BoardInfo* b,ExtMove moves[], int index) {
 	}
 	return num_moves_generated;
 }
-U8 getWhiteRookMoves(BoardInfo* b, ExtMove moves[], int index) {
-	U64 rooks = b->WhiteRookBB;
+U8 getWhiteRookMoves(Position* b, ExtMove moves[], int index) {
+	U64 rooks = b->whitePieces[ROOK];
 	int num_moves_generated = 0;
 	
 	while (rooks != 0L) {
@@ -632,8 +632,8 @@ U8 getWhiteRookMoves(BoardInfo* b, ExtMove moves[], int index) {
 	return num_moves_generated;
 }
 
-U8 getBlackRookMoves(BoardInfo *b, ExtMove moves[], int index) {
-	U64 rooks = b->BlackRookBB;
+U8 getBlackRookMoves(Position *b, ExtMove moves[], int index) {
+	U64 rooks = b->blackPieces[ROOK];
 	U8 num_moves_generated = 0;
 	
 	while (rooks != 0L) {
@@ -658,8 +658,8 @@ U8 getBlackRookMoves(BoardInfo *b, ExtMove moves[], int index) {
 }
 
 
-U8 getWhiteQueenMoves(BoardInfo* b, ExtMove moves[], int index) {
-	U64 queens = b->WhiteQueenBB;
+U8 getWhiteQueenMoves(Position* b, ExtMove moves[], int index) {
+	U64 queens = b->whitePieces[QUEEN];
 	int num_moves_generated = 0;
 	
 	while (queens != 0L) {
@@ -685,8 +685,8 @@ U8 getWhiteQueenMoves(BoardInfo* b, ExtMove moves[], int index) {
 	return num_moves_generated;
 }
 
-U8 getBlackQueenMoves(BoardInfo * b, ExtMove moves[], int index) {
-	U64 queens = b->BlackQueenBB;
+U8 getBlackQueenMoves(Position * b, ExtMove moves[], int index) {
+	U64 queens = b->blackPieces[QUEEN];
 	U8 num_moves_generated = 0;
 	
 	while (queens != 0L) {
@@ -709,29 +709,6 @@ U8 getBlackQueenMoves(BoardInfo * b, ExtMove moves[], int index) {
 		queens &= ~from;
 	}
 	return num_moves_generated;
-}
-//TODO needs to be vastly improved
-U8 Movegen::getAllCaptures(Board * b, ExtMove moves[]){
-	U8 movess = getAllLegalMoves(b,moves);
-	U64 piecesToCap;
-	if(b->currentBoard()->whiteToMove){
-		piecesToCap = b->currentBoard()->BlackPiecesBB;
-	}else{
-		piecesToCap = b->currentBoard()->WhitePiecesBB;
-	}
-	
-	int j = 0;
-	for(int i = 0; i < movess; i++){
-		 if((getSquare[to_sq(moves[i])] & piecesToCap) != 0 || type_of(moves[i]) == PROMOTION){
-			int see = b->staticExchange(moves[i].move);
-			if(see > 0){
-				moves[j].move = moves[i].move;
-				moves[j].score = see;
-				j++;
-			}
-		 }
-	}
-	return j;
 }
 
 /*
