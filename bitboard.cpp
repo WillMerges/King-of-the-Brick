@@ -1,14 +1,17 @@
 #include "bitboard.h"
 #include "types.h"
-squareMasks[64]={};
-rankMasks[8]={};
-fileMasks[8]={};
+U64 squareMasks[64]={};
+U64 rankMasks[8]={};
+U64 fileMasks[8]={};
 U8 getFile(U8 sq){
     return sq%8;
 }
 
 U8 getRank(U8 sq){
     return sq/8;
+}
+ U64 lowestOneBit(U64 i){
+	return i & -((S64) i);
 }
 
 U8 popcnt(U64 bb){

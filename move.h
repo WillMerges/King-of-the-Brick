@@ -15,7 +15,7 @@ typedef U32 Move;
 enum MoveType{
     NORMAL=0,
     PROMOTION=1,
-    CASTLE=2,
+    CASTLING=2,
     ENPASSANT=3
 };
 
@@ -47,6 +47,6 @@ constexpr PieceType get_promotion_type(Move move){
     return PieceType((move>>17)&7);
 }
 
-constexpr MAX_MOVES =90;
+constexpr int MAX_MOVES =90;
 
 #endif

@@ -204,7 +204,7 @@ U8 getWhiteKingMoves(Position * b, ExtMove moves[], int index) {
 	return num_moves_generated;
 }
 U8 getBlackKingMoves(BoardInfo* b, ExtMove moves[], int index) {
-	U64 king = b->BlackKingBB;
+	U64 king = b->blackPieces[KING];
 	
 	int num_moves_generated = 0;
 	
@@ -255,8 +255,9 @@ U8 getBlackKingMoves(BoardInfo* b, ExtMove moves[], int index) {
 	
 	return num_moves_generated;
 }
-U8 getWhiteKnightMoves(BoardInfo *b, ExtMove moves[], int index) {
-	U64 knights = b->WhiteKnightBB;
+
+U8 getWhiteKnightMoves(Position *b, ExtMove moves[], int index) {
+	U64 knights = b->whitePieces[KNIGHT];
 	U8 num_moves_generated = 0;
 	
 	while (knights != 0L) {
@@ -270,7 +271,6 @@ U8 getWhiteKnightMoves(BoardInfo *b, ExtMove moves[], int index) {
 			Move move =
 					createMove(from_loc, to_loc, KNIGHT);
 			addMove(move,moves,index+num_moves_generated,true,b);
-			//moves[index + num_moves_generated].move = move;
 			num_moves_generated++;
 			movelocs &= ~to;
 		}
@@ -280,8 +280,8 @@ U8 getWhiteKnightMoves(BoardInfo *b, ExtMove moves[], int index) {
 }
 
 
-U8 getBlackKnightMoves(BoardInfo* b,ExtMove moves[], int index) {
-	U64 knights = b->BlackKnightBB;
+U8 getBlackKnightMoves(Position * b,ExtMove moves[], int index) {
+	U64 knights = b->blackPieces[KNIGHT];
 	int num_moves_generated = 0;
 	
 	while (knights != 0L) {
@@ -294,7 +294,6 @@ U8 getBlackKnightMoves(BoardInfo* b,ExtMove moves[], int index) {
 			U8 to_loc = trailingZeroCount(to);
 			Move move =
 					createMove(from_loc, to_loc, KNIGHT);
-			//moves[index + num_moves_generated].move = move;
 			addMove(move,moves,index+num_moves_generated,false,b);
 			num_moves_generated++;
 			movelocs &= ~to;
@@ -303,8 +302,8 @@ U8 getBlackKnightMoves(BoardInfo* b,ExtMove moves[], int index) {
 	}
 	return num_moves_generated;
 }
-U8 getWhitePawnMoves(BoardInfo * b, ExtMove moves[], int listIdx){
-	U64 pawns = b->WhitePawnBB;
+U8 getWhitePawnMoves(Position * b, ExtMove moves[], int listIdx){
+	U64 pawns = b->whitePieces[PAWN];
 	int moveGenCount = 0;
 	
 	while(pawns != 0){
