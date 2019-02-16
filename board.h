@@ -21,10 +21,15 @@ typedef struct{
 
 class Board{
     void makeMove(Move move);
+    void undoMove();
+    void makeNullMove();
     
     bool isDrawn();
     bool isGameOver();
+    bool isCheckmate();
+    bool isKingInCenter();
+
     bool parseFen(std::string fen);
-    
+
 }
 #endif
