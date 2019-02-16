@@ -123,29 +123,29 @@ bool Board::parseFen(std::string fen){
             if(*row<'0' && *row >'9') {
                 U64 sq = getSquare(row, up);
                 if(*row == 'p') {
-                    this->pos.blackPieces(PAWN);
+                    this->pos->blackPieces(PAWN);
                 } else if(*row == 'k') {
-                    this->pos.blackPieces(KING);
+                    this->pos->blackPieces(KING);
                 } else if(*row == 'r') {
-                    this->pos.blackPieces(ROOK);
+                    this->pos->blackPieces(ROOK);
                 } else if(*row == 'n') {
-                    this->pos.blackPieces(KNIGHT);
+                    this->pos->blackPieces(KNIGHT);
                 } else if(*row == 'b') {
-                    this->pos.blackPieces(BISHOP);
+                    this->pos->blackPieces(BISHOP);
                 } else if(*row == 'q') {
-                    this->pos.blackPieces(QUEEN);
+                    this->pos->blackPieces(QUEEN);
                 } else if(*row == 'P') {
-                    this->pos.whitePieces(PAWN);
+                    this->pos->whitePieces(PAWN);
                 } else if(*row == 'K') {
-                    this->pos.whitePieces(KING);
+                    this->pos->whitePieces(KING);
                 } else if(*row == 'R') {
-                    this->pos.whitePieces(ROOK);
+                    this->pos->whitePieces(ROOK);
                 } else if(*row == 'N') {
-                    this->pos.whitePieces(KNIGHT);
+                    this->pos->whitePieces(KNIGHT);
                 } else if(*row == 'B') {
-                    this->pos.whitePieces(BISHOP);
+                    this->pos->whitePieces(BISHOP);
                 } else if(*row == 'Q') {
-                    this->pos.whitePieces(QUEEN);
+                    this->pos->whitePieces(QUEEN);
                 } //else it's empty probably
                 right++;
             } else {
@@ -157,10 +157,10 @@ bool Board::parseFen(std::string fen){
     }
 
     for(int i=0; i<NUM_PIECE_TYPES; i++) {
-        this->pos.WhitePiecesBB |= this->pos.whitePieces[i];
-        this->pos.blackPiecesBB |= this->pos.blackPieces[i];
+        this->pos->WhitePiecesBB |= this->pos->whitePieces[i];
+        this->pos->blackPiecesBB |= this->pos->blackPieces[i];
     }
-    this->pos.AllPiecesBB = this->pos.WhitePiecesBB | this->pos.BlackPiecesBB;
+    this->pos->AllPiecesBB = this->pos->WhitePiecesBB | this->pos->BlackPiecesBB;
 
 
     std::istringstream endstr(rowstr);
@@ -172,7 +172,7 @@ bool Board::parseFen(std::string fen){
     while(std::getLine(endstr, substr, ' ')) {
         char* cstr = substr.c_str();
         if(i==0) {
-            *pos.whiteToMove=((*(cstr)=='w'));
+            pos->whiteToMove=((*(cstr)=='w'));
         } else if(i==1) {
 
         }
