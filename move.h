@@ -19,11 +19,11 @@ enum MoveType{
     ENPASSANT=3
 };
 
-constexpr Move makeMove(U8 from, U8 to, PieceType pieceMoved){
+constexpr Move createMove(U8 from, U8 to, PieceType pieceMoved){
     return (pieceMoved<<12)+(from<<6)+to;
 }
 
-constexpr Move makeMove(U8 from, U8 to, PieceType pieceMoved, MoveType moveType, PieceType promoteTo){
+constexpr Move createMove(U8 from, U8 to, PieceType pieceMoved, MoveType moveType, PieceType promoteTo){
     return (promoteTo<<17)+(moveType<<15)+(pieceMoved<<16)+(from<<8)+to;
 }
 

@@ -4,8 +4,8 @@
 #include "bitboard.h"
 #include "move.h"
 #include <string>
-const int NUM_PIECE_TYPES=6;
-
+constexpr int NUM_PIECE_TYPES=6;
+constexpr U8 NO_ENPASSANT=199;//Shouldn't matter
 struct Position{
     U64 zobrist;
 
@@ -13,7 +13,7 @@ struct Position{
     bool whiteToMove;
 
     U8 enPassantLoc;
-    U8 fiftyMoveCount;
+    U8 fiftyMoveRule;
 
     bool canWhiteQueensideCastle;
     bool canWhiteKingsideCastle;

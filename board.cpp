@@ -2,7 +2,6 @@
 #include <string>
 #include "move.h"
 #include "types.h"
-
 #include <string.h>
 
 Position allPos[MAX_MOVES];
@@ -16,4 +15,7 @@ void Board::makeNullMove(){
     memcpy(newPos,pos,sizeof(Position));
 
     newPos->moveNumber+=1;
+    newPos->fiftyMoveRule+=1;
+    newPos->enPassantLoc=NO_ENPASSANT;
+    newPos->prevPos=pos;
 }
