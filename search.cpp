@@ -13,7 +13,7 @@ Move getBestMove(Board * board, Config * config){
     Move move_lowest;
     for(int i=0; i<moveCount; i++) {
         board->makeMove(moves[i].move);
-        int eval = alphaBeta(board, INT_MIN, INT_MAX, depth-1,NULL);
+        int eval = alphaBeta(board, INT_MIN, INT_MAX, config->depth-1,NULL);
         board->undoMove();
         if(eval > highest) {
             highest = eval;
