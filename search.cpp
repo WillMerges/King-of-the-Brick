@@ -32,6 +32,13 @@ Move getBestMove(Board * board, Config * config){
     }
 }
 
+void calculateMovetime(Board * board, Config * config){
+    if(config->wtime != 0 || config->btime != 0){
+        int time = board->pos->whiteToMove ? config->wtime : config->btime;
+        config->movetime = ((400/board->pos->moveNumber)+15) / time;
+    }
+}
+
 int alphaBeta(Board * board, int alpha, int beta, int depth,LINE * pline){
     ExtMove moves[MAX_MOVES];
     int moveCount = getAllLegalMoves(board,moves);
