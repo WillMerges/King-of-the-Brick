@@ -41,7 +41,7 @@ int alphaBeta(Board * board, int alpha, int beta, int depth){
     for(int i = 0; i < moveCount; i++){
         Move move = moves[i].move;
         board->makeMove(move);
-        val = -alphaBeta(board,-beta,-alpha,adjDepth);
+        int val = -alphaBeta(board,-beta,-alpha,adjDepth);
         board->undoMove();
         if(val > alpha){
             alpha=val;
