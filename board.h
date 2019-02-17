@@ -45,7 +45,7 @@ class Board{
 
         bool isOwnKingInCheck();
 
-        bool parseFen(std::string fen);
+        bool parseFen(std::string fen, Position * pos);
         Position * getCurPos();
         Position * pos;
         std::string getFen();

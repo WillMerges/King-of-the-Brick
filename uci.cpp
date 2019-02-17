@@ -48,6 +48,7 @@ double get_cpu_time(){
     return (double)clock() / CLOCKS_PER_SEC;
 }
 
+Position p;
 
 char* UCI::getMoveString(Move m, char* ret){
 	char from[3], to[3];
@@ -111,7 +112,7 @@ void UCI::setPosition(Board * board, Position* info, istringstream* parser){
 	}else{
 		return;
 	}
-	board->parseFen(fen);
+	board->parseFen(fen,&p);
 	while((*parser) >> token){
 		Move m = toMove(board, token);
 		if(m != -1){
@@ -188,12 +189,13 @@ void UCI::perft(Board * board, istringstream * parser){
 	printf("Nodes: %i\n" , numNodes);
 	printf("Took %fs. nps: %f.\n",newTime-time,numNodes/(newTime-time));
 }
+
 bool UCI::loop(){
 	Board b;
 	Position info;
 	std::string token, cmd;
 	
-	b.parseFen(StartPositionFEN);
+	b.parseFen(StartPositionFEN,&p);
 	std::cout << ("King of the Brick") << std::endl;
 	while(true){
 		getline(cin,cmd);
@@ -206,7 +208,7 @@ bool UCI::loop(){
 			std::cout << "id name King of the Brick\n";
 			std::cout << "uciok" << std::endl;
 		}else if(token == "ucinewgame"){
-			b.parseFen(StartPositionFEN);
+			b.parseFen(StartPositionFEN,&p);
 		}else if(token == "isready"){
 			std::cout << "readyok" << std::endl;
 		}else if(token == "position"){

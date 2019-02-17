@@ -136,10 +136,10 @@ void Board::makeMove(Move move){
     }
 }
 
-bool Board::parseFen(std::string fen){
+bool Board::parseFen(std::string fen, Position * p){
     std::string rowstr;
     std::istringstream ss(fen);
-
+    this->pos=p;
     int up = 7; //start at corner
     int right;
 
@@ -219,6 +219,7 @@ bool Board::parseFen(std::string fen){
     if(this->pos->moveNumber > MAX_MOVES) {
         this->pos->moveNumber = 1;
     }
+    allPos[this->pos->moveNumber]=*pos;
     return true;
 }
 
