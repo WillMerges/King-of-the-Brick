@@ -28,11 +28,11 @@ constexpr Move createMove(U8 from, U8 to, PieceType pieceMoved, PieceType promot
 }
 
 constexpr U8 from_sq(Move move){
-    return (move>>6)&7;
+    return (move>>6)&0x3F;
 }
 
 constexpr U8 to_sq(Move move){
-    return move & 7;
+    return move & 0x3f;
 }
 
 constexpr PieceType get_piece_moved(Move move){

@@ -53,6 +53,7 @@ Position p;
 char* UCI::getMoveString(Move m, char* ret){
 	char from[3], to[3];
 	char* arr = getAlgebraicPos(from_sq(m));
+	printf("Move: %i From: %i To: %i\n",m,from_sq(m),to_sq(m));
 	from[0] = arr[0];from[1]=arr[1];from[2]=arr[2];from[3]=arr[3];
 	
 	arr = getAlgebraicPos(to_sq(m));
