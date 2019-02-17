@@ -10,8 +10,29 @@
 #include "bbmagic.h"
 #include <stdio.h>
 #include "string.h"
+#include "bitboard.h"
+#include "move.h"
+
 using namespace std;
 std::string StartPositionFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+char alge[10]={};	
+char * getAlgebraicPos(U8 loc){
+	if(loc == NO_ENPASSANT){
+		alge[0]='-';
+		alge[1]='\0';
+		return alge;
+	}
+	alge[0] = (loc % 8)+'a';
+	alge[1]= (loc /8)+'1';
+	alge[2]='\0';
+	return alge;
+}	
+ U8 algebraicPosToLoc(const char * pos){
+	if(*pos=='-'){
+		return NO_ENPASSANT;
+	}
+	return (pos[0]-'a')+(pos[1]-'0'-1)*8;
+}
 
 #include <time.h>
 #include <sys/time.h>
@@ -36,8 +57,8 @@ char* UCI::getMoveString(Move m, char* ret){
 	arr = getAlgebraicPos(to_sq(m));
 
 	to[0] = arr[0];to[1]=arr[1];to[2]=arr[2];to[3]=arr[3];
-	if(promotion_type(m)!=PAWN && promotion_type(m) != KING){
-		switch(promotion_type(m)){
+	if(get_promotion_type(m)!=PAWN && get_promotion_type(m) != KING){
+		switch(get_promotion_type(m)){
 			case KNIGHT:
 				snprintf(ret,10,"%s%sn",from,to);
 				break;
@@ -63,7 +84,7 @@ Move UCI::toMove(Board * board, std::string move){
 	//printf("%s\n", move.c_str());
 	char curMove[100];
 	ExtMove moves[MAX_MOVES];
-	U8 count = getAllLegalMoves(board,moves);
+	U8 count = getAllLegalMoves(board->pos,moves);
 	for(int i = 0; i < count; i++){
 		memset(&curMove[0], 0, sizeof(curMove));
 		Move move1 = moves[i].move;
@@ -77,7 +98,7 @@ Move UCI::toMove(Board * board, std::string move){
 }
 
 
-void UCI::setPosition(Board * board, BoardInfo* info, istringstream* parser){
+void UCI::setPosition(Board * board, Position* info, istringstream* parser){
 	std::string token, fen;
 	(*parser) >> token;
 	if(token=="startpos"){
@@ -90,7 +111,7 @@ void UCI::setPosition(Board * board, BoardInfo* info, istringstream* parser){
 	}else{
 		return;
 	}
-	board->readFromFen(fen,info);
+	board->parseFen(fen);
 	while((*parser) >> token){
 		Move m = toMove(board, token);
 		if(m != -1){
@@ -100,42 +121,18 @@ void UCI::setPosition(Board * board, BoardInfo* info, istringstream* parser){
 		}
 	}
 }
-void printUciOptions(){
-	std::cout<<"option name Hash type spin default 32 min 1 max 1048576\n";
-}
-void setOption(istringstream *parser){
-	string token;
-	if((*parser) >> token){
-			if(token == "name"){
-					if((*parser) >> token){
-						if(token == "Hash"){
-							if((*parser) >> token){
-								if(token == "value"){
-									if((*parser) >> token){
-										int size = atoi(token.c_str());
-										TT::setSize(1048576*size);
-										return;
-									}
-								}
-							}
-						}
-					}
-			}
-	}
-	printf("Unrecognized option\n");
-	return;
-}
+
 void UCI::go(Board * board, istringstream *parser){
 		char buffer[100];
 	string token;
-	Search::Config cfg;
+	Config cfg;
 	while((*parser) >> token){
 		if(token == "depth"){
 			(*parser) >> cfg.depth;
 		}else if(token =="wtime"){
-			(*parser) >> cfg.wTime;
+			(*parser) >> cfg.wtime;
 		}else if(token=="btime"){
-			(*parser) >> cfg.bTime;
+			(*parser) >> cfg.btime;
 		}else if(token == "winc"){
 			(*parser) >> cfg.winc;
 		}else if(token == "binc"){
@@ -146,16 +143,16 @@ void UCI::go(Board * board, istringstream *parser){
 			cfg.depth = 20;
 		}
 	}
-	Search::setConfig(&cfg);
-	Move bestMove = Search::getBestMove(board);
-	printf("bestmove %s\n", getMoveString(bestMove,buffer));
+	//Search::setConfig(&cfg);
+	//Move bestMove = Search::getBestMove(board);
+	//printf("bestmove %s\n", getMoveString(bestMove,buffer));
 }
 int UCI::perft(Board* b, int depth) {
 	if (depth == 0){
 		return 1;
 	}
 	ExtMove moveList[MAX_MOVES]={};
-	int num_moves = getAllLegalMoves(b, moveList);
+	int num_moves = getAllLegalMoves(b->pos, moveList);
 	int count = 0;	
 	for (int i = 0; i < num_moves; i++) {
 		b->makeMove(moveList[i].move);
@@ -168,7 +165,7 @@ int UCI::perft(Board* b, int depth) {
 
 int UCI::divide(Board* b, int depth) {
 	ExtMove moveList[MAX_MOVES]={};
-	int num_moves = getAllLegalMoves(b, moveList);
+	int num_moves = getAllLegalMoves(b->pos, moveList);
 	int count = 0;
 	char buffer[100];
 	for (int i = 0; i < num_moves; i++) {
@@ -191,16 +188,13 @@ void UCI::perft(Board * board, istringstream * parser){
 	printf("Nodes: %i\n" , numNodes);
 	printf("Took %fs. nps: %f.\n",newTime-time,numNodes/(newTime-time));
 }
-#include "bitboard.h"
-#include "move.h"
 bool UCI::loop(){
 	Board b;
-	BoardInfo info;
+	Position info;
 	std::string token, cmd;
 	
-	TT::setSize(1048576*32);//1mb
-	b.readFromFen(StartPositionFEN,&info);
-	std::cout << ("Apollo v1.2.1 by Stuart Nevans Locke") << std::endl;
+	b.parseFen(StartPositionFEN);
+	std::cout << ("King of the Brick") << std::endl;
 	while(true){
 		getline(cin,cmd);
 		istringstream parser(cmd);
@@ -209,19 +203,16 @@ bool UCI::loop(){
 			return false;
 		}
 		if(token == "uci"){
-			std::cout << "id name Apollo Release 1.2.1\n";
-			std::cout << "id author Stuart Nevans Locke\n\n";
-			printUciOptions();
+			std::cout << "id name King of the Brick\n";
 			std::cout << "uciok" << std::endl;
 		}else if(token == "ucinewgame"){
-			b.readFromFen(StartPositionFEN,&info);
-			TT::clear();
+			b.parseFen(StartPositionFEN);
 		}else if(token == "isready"){
 			std::cout << "readyok" << std::endl;
 		}else if(token == "position"){
 			setPosition(&b,&info,&parser);
 		}else if(token=="setoption"){
-			setOption(&parser);
+
 		}else if(token == "go"){
 			go(&b,&parser);
 		}else if(token == "perft"){
@@ -229,12 +220,9 @@ bool UCI::loop(){
 		}else if(token == "eval"){
 			printf("Current Position: %i\n",Eval::evaluate(&b));
 		}else if(token == "d"){
-			Move bestMove=65;
-			if(TT::probe(b.currentBoard()->zobrist)->hash == b.currentBoard()->zobrist){
-				bestMove = TT::probe(b.currentBoard()->zobrist)->bestMove;
-			}
-			char buffer[100];
-			printf("FEN: %s\nIs checkmate: %i\nIs draw: %i\nZobrist: %llx\nEval %i\nHash Move: %s\nPinned Pieces %llx\n", b.getFen().c_str(), b.isCheckmate(), b.isDraw(), b.currentBoard()->zobrist, Eval::evaluate(&b), UCI::getMoveString(bestMove,buffer),b.currentBoard()->pinnedPieces);
+			
+			//char buffer[100];
+			//printf("FEN: %s\nIs checkmate: %i\nIs draw: %i\nZobrist: %llx\nEval %i\nHash Move: %s\nPinned Pieces %llx\n", b.getFen().c_str(), b.isCheckmate(), b.isDraw(), b.currentBoard()->zobrist, Eval::evaluate(&b), UCI::getMoveString(bestMove,buffer),b.currentBoard()->pinnedPieces);
 		}
 	}
 	return true;
