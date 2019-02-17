@@ -5,23 +5,29 @@
 #include <string.h>
 #include <sstream>
 #include <stdlib.h>
-#include "bbmagic.h"
+#include "movegen.h"
+#include <stdbool.h>
 
 Position allPos[MAX_MOVES];
-const U64 centerSquares = squareMasks[35] | squareMasks[36] | squareMasks[27] | squareMasks[28];
-
 
 void Board::undoMove(){
     pos=pos->prevPos;
+}
+
+bool Board::isCheckmate() {
+    ExtMove moves[100];
+    int moves = 0;
+    moves = getAllLegalMoves(this, moves);
+
+    return isOwnKingInCheck && !getAllLegalMoves(this, moves);
 }
 
 bool Board::isOwnKingInCheck(){
 	if(pos->whiteToMove)
 		return isSquareAttacked(pos, pos -> whitePieces[KING],true);
 	else
-		return isSquareAttacked(pos, pos -> blackPieces[KING],false);   
+		return isSquareAttacked(pos, pos -> blackPieces[KING],false);
 }
-
 void Board::makeNullMove(){
     Position * newPos = &allPos[pos->moveNumber+1];
     memcpy(newPos,pos,sizeof(Position));
@@ -33,7 +39,7 @@ void Board::makeNullMove(){
 
 
     //TODO update zobrist
-    newPos->whiteToMove=!pos->whiteToMove;
+    newPos->whiteToMove!=pos->whiteToMove;
     pos=newPos;
 }
 
@@ -71,13 +77,8 @@ void Board::makeMove(Move move){
         case NORMAL:
             moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
             //setting possible grid to enpassant
-            if (pieceToMove == PAWN && (from==(to+16) || from==(to-16))){
-                if (newPos->whiteToMove){
-                    newPos->enPassantLoc = to - 8;
-                }
-                else{
-                    newPos->enPassantLoc = to + 8;
-                }
+            if (pieceToMove == PAWN && (from==to+16 | from==to-16)){
+
             }
             break;
 
@@ -208,10 +209,4 @@ bool Board::parseFen(std::string fen){
         this->pos->moveNumber = 1;
     }
     return true;
-}
-
-
-bool Board::isKingInCenter(){
-    Bitboard * moverPieces = pos->whiteToMove ? pos->whitePieces : pos->blackPieces; //getting the pieces of who is moving
-    return (moverPieces[KING] & centerSquares) != 1;
 }
