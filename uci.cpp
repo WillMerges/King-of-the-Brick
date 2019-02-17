@@ -10,7 +10,6 @@
 #include "bbmagic.h"
 #include <stdio.h>
 #include "string.h"
-
 #include "bitboard.h"
 #include "move.h"
 
