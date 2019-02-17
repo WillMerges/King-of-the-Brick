@@ -157,7 +157,7 @@ bool Board::parseFen(std::string fen, Position * p){
 
         while(*row != '\0') {
             if(!(*row>'0' && *row <'9')) {
-                U64 sq = squareMasks[up*8+right];
+                U64 sq = squareMasks[right*8+up];
                 if(*row == 'p') {
                     this->pos->blackPieces[PAWN] |= sq;
                 } else if(*row == 'k') {
