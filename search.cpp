@@ -12,7 +12,9 @@ Move getBestMove(Board * board, Config * config){
     Move move_highest;
     Move move_lowest;
     for(int i=0; i<moveCount; i++) {
+        board->makeMove(moves[i].move);
         int eval = alphaBeta(board, INT_MIN, INT_MAX, 1,NULL);
+        board->undoMove();
         if(eval > highest) {
             highest = eval;
             move_highest = moves[i].move;
@@ -20,7 +22,6 @@ Move getBestMove(Board * board, Config * config){
             lowest = eval;
             move_lowest = moves[i].move;
         }
-        
     }
     if(board->pos->whiteToMove) {
         return move_highest;
