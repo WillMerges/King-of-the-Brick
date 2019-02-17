@@ -20,11 +20,12 @@ Move getBestMove(Board * board, Config * config){
             lowest = eval;
             move_lowest = moves[i].move;
         }
-        if(board->pos->whiteToMove) {
-            return move_highest;
-        } else {
-            return move_lowest;
-        }
+        
+    }
+    if(board->pos->whiteToMove) {
+        return move_highest;
+    } else {
+        return move_lowest;
     }
 }
 
