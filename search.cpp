@@ -1,6 +1,7 @@
 #include "eval.h"
 #include "search.h"
 #include <limits.h>
+#include "movegen.h"
 
 
 int getBestMove(Board * board, Config * config){
