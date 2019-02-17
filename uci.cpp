@@ -229,3 +229,6 @@ bool UCI::loop(){
 
 }
 
+int main(){
+	UCI::loop();
+}
