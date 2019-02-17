@@ -31,7 +31,7 @@ bool Board::isCheckmate() {
 }
 
 bool Board::isDrawn() {
-    return !(this->pos->fiftyMoveRule == 50);
+    return this->pos->fiftyMoveRule == 50;
 }
 
 bool Board::isOwnKingInCheck(){
@@ -234,4 +234,3 @@ bool Board::isKingInCenter(){
     Bitboard * moverPieces = pos->whiteToMove ? pos->whitePieces : pos->blackPieces; //getting the pieces of who is moving
     return (moverPieces[KING] & centerSquares) != 1;
 }
-
