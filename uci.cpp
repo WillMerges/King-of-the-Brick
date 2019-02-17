@@ -84,7 +84,7 @@ Move UCI::toMove(Board * board, std::string move){
 	//printf("%s\n", move.c_str());
 	char curMove[100];
 	ExtMove moves[MAX_MOVES];
-	U8 count = getAllLegalMoves(board->pos,moves);
+	U8 count = getAllLegalMoves(board,moves);
 	for(int i = 0; i < count; i++){
 		memset(&curMove[0], 0, sizeof(curMove));
 		Move move1 = moves[i].move;
@@ -152,7 +152,7 @@ int UCI::perft(Board* b, int depth) {
 		return 1;
 	}
 	ExtMove moveList[MAX_MOVES]={};
-	int num_moves = getAllLegalMoves(b->pos, moveList);
+	int num_moves = getAllLegalMoves(b, moveList);
 	int count = 0;	
 	for (int i = 0; i < num_moves; i++) {
 		b->makeMove(moveList[i].move);
@@ -165,7 +165,7 @@ int UCI::perft(Board* b, int depth) {
 
 int UCI::divide(Board* b, int depth) {
 	ExtMove moveList[MAX_MOVES]={};
-	int num_moves = getAllLegalMoves(b->pos, moveList);
+	int num_moves = getAllLegalMoves(b, moveList);
 	int count = 0;
 	char buffer[100];
 	for (int i = 0; i < num_moves; i++) {

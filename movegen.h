@@ -27,7 +27,7 @@ void addMove(Move move, ExtMove moves[],int index, bool isWhitePieceMoving, Posi
 Move* getMoveList();
 
 U8 getAllPseudoLegalMoves(Position * boardInfo, ExtMove list[]);
-U8 getAllLegalMoves(Position* boardInfo, ExtMove list[]);
+U8 getAllLegalMoves(Board* boardInfo, ExtMove list[]);
 
 namespace Movegen{
 	U8 getAllCaptures(Position * b, ExtMove moves[]);
