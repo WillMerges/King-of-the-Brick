@@ -50,6 +50,7 @@ int evaluate(Board *board) {
         }
     }
     int eval = 0;
+    Position *p = board->pos;
     for(int i = 0; i < NUM_PIECE_TYPES; i++){
         U64 white_pieces = p->whitePieces[i];
         U64 black_pieces = p->blackPieces[i];
