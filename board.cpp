@@ -66,6 +66,9 @@ void Board::makeMove(Move move){
     Position * newPos = &allPos[pos->moveNumber+1];
     newPos->enPassantLoc=NO_ENPASSANT;
     memcpy(newPos,pos,sizeof(Position));
+    newPos->WhitePiecesBB=0;
+    newPos->BlackPiecesBB=0;
+    newPos->AllPiecesBB=0;
     newPos->prevPos=pos;
     newPos->moveNumber+=1;
     newPos->fiftyMoveRule+=1;
@@ -138,6 +141,7 @@ void Board::makeMove(Move move){
         }
     }
     pos=newPos;
+
     for(int i=0; i<NUM_PIECE_TYPES; i++) {
         this->pos->WhitePiecesBB |= this->pos->whitePieces[i];
         this->pos->BlackPiecesBB |= this->pos->blackPieces[i];
