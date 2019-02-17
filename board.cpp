@@ -71,8 +71,13 @@ void Board::makeMove(Move move){
         case NORMAL:
             moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
             //setting possible grid to enpassant
-            if (pieceToMove == PAWN && (from==to+16 | from==to-16)){
-
+            if (pieceToMove == PAWN && (from==(to+16) || from==(to-16))){
+                if (newPos->whiteToMove){
+                    newPos->enPassantLoc = to - 8;
+                }
+                else{
+                    newPos->enPassantLoc = to + 8;
+                }
             }
             break;
 
