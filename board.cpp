@@ -236,15 +236,15 @@ bool Board::parseFen(std::string fen, Position * p){
     std::string rowstr;
     std::istringstream ss(fen);
     this->pos=p;
+    memset(this->pos, 0, sizeof(this->pos));
     int up = 7; //start at corner
     int right;
 
     while(std::getline(ss, rowstr, '/')) {
-        memset(this->pos, 0, sizeof(this->pos));
         right = 0;
         const char *row = rowstr.c_str();
 
-        while(*row != '\0') {
+        while(*row != '\0' && *row != ' ') {
             if(!(*row>'0' && *row <'9')) {
                 U64 sq = squareMasks[up*8+right];
                 if(*row == 'p') {
