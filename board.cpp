@@ -143,6 +143,7 @@ void Board::makeMove(Move move){
         this->pos->BlackPiecesBB |= this->pos->blackPieces[i];
     }
     this->pos->AllPiecesBB = this->pos->WhitePiecesBB | this->pos->BlackPiecesBB;
+    pos->whiteToMove = !pos->whiteToMove;
 }
 
 char Board::getPieceAtChar(U8 loc){
