@@ -14,6 +14,12 @@ const U64 centerSquares = squareMasks[35] | squareMasks[36] | squareMasks[27] | 
 void Board::undoMove(){
     pos=pos->prevPos;
 }
+bool Board::legal() {
+	if (!boardInfo->whiteToMove){
+		return !isSquareAttacked(currentBoard(), boardInfo->WhiteKingBB, true);
+	}
+	return !isSquareAttacked(currentBoard(), boardInfo->BlackKingBB, false);
+}
 
 bool Board::isCheckmate() {
     ExtMove moves[100];
