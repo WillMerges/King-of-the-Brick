@@ -41,6 +41,7 @@ int evaluate(Board *board) {
     if(board->isDrawn()) {
         return 0;
     } else if(board->isKingInCenter() || board->isCheckmate()) {
+        printf("%i %i\n",board->isKingInCenter(),board->isCheckmate());
         if(board->pos->whiteToMove) {
             //black won?
             return -INT_MAX;

@@ -3,7 +3,7 @@
 #include <limits.h>
 #include "movegen.h"
 #include "eval.h"
-
+#include "uci.h"
 bool canDoNullMove;
 
 Move getBestMove(Board * board, Config * config){
@@ -13,9 +13,12 @@ Move getBestMove(Board * board, Config * config){
     int highest = INT_MIN;
     Move move_highest;
     Move move_lowest;
+    char buffer[100];
     for(int i=0; i<moveCount; i++) {
         board->makeMove(moves[i].move);
+
         int eval = alphaBeta(board, INT_MIN, INT_MAX, config->depth-1,NULL);
+               printf("Eval: %s %i\n",UCI::getMoveString(moves[i].move,buffer),eval);
         board->undoMove();
         if(eval > highest) {
             highest = eval;
