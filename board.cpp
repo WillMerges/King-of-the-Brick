@@ -50,7 +50,7 @@ void Board::makeNullMove(){
 
 
     //TODO update zobrist
-    newPos->whiteToMove!=pos->whiteToMove;
+    newPos->whiteToMove=!pos->whiteToMove;
     pos=newPos;
 }
 
