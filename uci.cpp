@@ -194,7 +194,8 @@ bool UCI::loop(){
 	Board b;
 	Position info;
 	std::string token, cmd;
-	
+	initBBHelpers();
+	initBBMagic();
 	b.parseFen(StartPositionFEN,&p);
 	std::cout << ("King of the Brick") << std::endl;
 	while(true){
