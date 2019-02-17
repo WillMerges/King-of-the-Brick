@@ -141,7 +141,6 @@ void Board::makeMove(Move move){
         this->pos->BlackPiecesBB |= this->pos->blackPieces[i];
     }
     this->pos->AllPiecesBB = this->pos->WhitePiecesBB | this->pos->BlackPiecesBB;
-
 }
 
 bool Board::parseFen(std::string fen, Position * p){
