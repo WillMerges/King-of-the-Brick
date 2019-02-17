@@ -8,6 +8,8 @@
 #include "bbmagic.h"
 
 Position allPos[MAX_MOVES];
+const U64 centerSquares = squareMasks[35] | squareMasks[36] | squareMasks[27] | squareMasks[28];
+
 
 void Board::undoMove(){
     pos=pos->prevPos;
@@ -201,4 +203,10 @@ bool Board::parseFen(std::string fen){
         this->pos->moveNumber = 1;
     }
     return true;
+}
+
+
+bool Board::isKingInCenter(){
+    Bitboard * moverPieces = pos->whiteToMove ? pos->whitePieces : pos->blackPieces; //getting the pieces of who is moving
+    return (moverPieces[KING] & centerSquares) != 1;
 }
