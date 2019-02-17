@@ -44,11 +44,11 @@ class Board{
 
 
         bool isOwnKingInCheck();
-
+        char getPieceAtChar(U8 loc);
+        std::string getFen();
         bool parseFen(std::string fen, Position * pos);
         Position * getCurPos();
         Position * pos;
-        std::string getFen();
 };
 
 #endif

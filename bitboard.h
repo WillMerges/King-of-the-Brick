@@ -3,7 +3,7 @@
 #include "types.h"
 
 typedef U64 Bitboard;
-
+#include "board.h"
 U8 getFile(U8);
 U8 getRank(U8);
 U8 popcnt(U64);
@@ -36,6 +36,7 @@ enum File : int {
 enum Rank : int {
   RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8, RANK_NB
 };
-
+char * getAlgebraicPos1(U8 loc);
+U8 algebraicPosToLoc1(const char * pos);
 int trailingZeroCount(U64 bb);
 #endif

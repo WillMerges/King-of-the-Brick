@@ -6,6 +6,24 @@ U64 fileMasks[8]={};
 U8 getFile(U8 sq){
     return sq%8;
 }
+char alge1[10]={};
+char * getAlgebraicPos1(U8 loc){
+	if(loc == NO_ENPASSANT){
+		alge1[0]='-';
+		alge1[1]='\0';
+		return alge1;
+	}
+	alge1[0] = (loc % 8)+'a';
+	alge1[1]= (loc /8)+'1';
+	alge1[2]='\0';
+	return alge1;
+}	
+ U8 algebraicPosToLoc1(const char * pos){
+	if(*pos=='-'){
+		return NO_ENPASSANT;
+	}
+	return (pos[0]-'a')+(pos[1]-'0'-1)*8;
+}
 
 U8 getRank(U8 sq){
     return sq/8;

@@ -143,6 +143,95 @@ void Board::makeMove(Move move){
     this->pos->AllPiecesBB = this->pos->WhitePiecesBB | this->pos->BlackPiecesBB;
 }
 
+char Board::getPieceAtChar(U8 loc){
+	U64 square = squareMasks[loc];
+	if((pos->WhitePiecesBB & square) != 0){
+		if((pos->whitePieces[PAWN] & square) != 0){
+			return 'P';
+		}else if((pos->whitePieces[KING] & square) != 0){
+			return 'K';
+		}else if((pos->whitePieces[BISHOP] & square) != 0){
+			return 'B';
+		}else if((pos->whitePieces[KNIGHT] & square) != 0){
+			return 'N';
+		}else if((pos->whitePieces[QUEEN] & square) != 0){
+			return 'Q';
+		}else if((pos->whitePieces[ROOK] & square) != 0){
+			return 'R';
+		}else{
+			return 'W';
+		}
+	}else if((pos->BlackPiecesBB & square) != 0){
+		if((pos->blackPieces[PAWN] & square) != 0){
+			return 'p';
+		}else if((pos->blackPieces[KING] & square) != 0){
+			return 'k';
+		}else if((pos->blackPieces[BISHOP] & square) != 0){
+			return 'b';
+		}else if((pos->blackPieces[KNIGHT] & square) != 0){
+			return 'n';
+		}else if((pos->blackPieces[QUEEN] & square) != 0){
+			return 'q';
+		}else if((pos->blackPieces[ROOK] & square) != 0){
+			return 'r';
+		}else{
+			return 'b';
+		}
+	}else{
+		return ' ';
+	}
+}
+std::string Board::getFen(){
+  int emptyCnt;
+  std::ostringstream ss;
+  for (int r = RANK_8; r >= RANK_1; --r)
+  {
+      for (int f = FILE_A; f <= FILE_H; ++f)
+      {
+		  U8 loc = getSquare(r,f);
+		  for(emptyCnt = 0; f <= FILE_H && ((pos->AllPiecesBB & squareMasks[loc]) == 0);){
+			  ++emptyCnt;
+			  f++;
+			  loc = getSquare(r,f);
+		  }
+		  if(emptyCnt != 0){
+			  ss << emptyCnt;
+		  }
+		  if(f <= FILE_H){
+			  ss << getPieceAtChar(loc);
+		  }
+	  }
+	  if(r > RANK_1){
+		  ss << '/';
+	  }
+  }
+  ss << " ";
+  ss << ((pos->whiteToMove) ? "w" : "b");
+  ss << " ";
+  if(pos->whiteKingCastle){
+	  ss << 'K';
+  }
+  if(pos->whiteQueenCastle){
+	  ss<< 'Q';
+  }
+  if(pos->blackKingCastle){
+	  ss << 'k';
+  }
+  if(pos->blackQueenCastle){
+	  ss << 'q';
+  }
+  if(!(pos->blackQueenCastle && pos->blackKingCastle && pos->whiteQueenCastle && pos->whiteKingCastle)){
+	  ss<< '-';
+  }
+  ss << " ";
+  ss << getAlgebraicPos1(pos->enPassantLoc);
+  ss << " ";
+  ss << std::to_string(pos->fiftyMoveRule).c_str();
+  ss << " ";
+  ss << std::to_string((1 + (pos->moveNumber))/2);
+	return ss.str();
+}
+
 bool Board::parseFen(std::string fen, Position * p){
     std::string rowstr;
     std::istringstream ss(fen);

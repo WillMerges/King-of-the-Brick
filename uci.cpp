@@ -223,7 +223,7 @@ bool UCI::loop(){
 		}else if(token == "eval"){
 			printf("Current Position: %i\n",evaluate(&b));
 		}else if(token == "d"){
-			
+			printf("%s\n",b.getFen().c_str());
 			//char buffer[100];
 			//printf("FEN: %s\nIs checkmate: %i\nIs draw: %i\nZobrist: %llx\nEval %i\nHash Move: %s\nPinned Pieces %llx\n", b.getFen().c_str(), b.isCheckmate(), b.isDraw(), b.currentBoard()->zobrist, Eval::evaluate(&b), UCI::getMoveString(bestMove,buffer),b.currentBoard()->pinnedPieces);
 		}
