@@ -83,10 +83,14 @@ void Board::makeMove(Move move){
     }
 
     //Accounting for move types
-    switch (moveType)
-    {
-        case NORMAL:
-            moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
+    if (moveType == PROMOTION){
+            PieceType newPiece = get_promotion_type(move);
+            moverPieces[newPiece] =  moverPieces[newPiece] | squareMasks[to];
+    }
+    else{
+        moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
+
+        if (moveType == NORMAL){
             //setting possible grid to enpassant
             if (pieceToMove == PAWN && (from==(to+16) || from==(to-16))){
                 if (newPos->whiteToMove){
@@ -96,14 +100,9 @@ void Board::makeMove(Move move){
                     newPos->enPassantLoc = to + 8;
                 }
             }
-            break;
+        }
 
-        case PROMOTION:
-            PieceType newPiece = get_promotion_type(move);
-            moverPieces[newPiece] =  moverPieces[newPiece] | squareMasks[to];
-            break;
-
-        case CASTLING:
+        if (moveType == CASTLING){
             if (newPos->whiteToMove){
                 if(to == 2){ //If white king is moving to C1
                     moverPieces[ROOK] = moverPieces[ROOK] & ~squareMasks[0];
@@ -124,20 +123,16 @@ void Board::makeMove(Move move){
                     moverPieces[ROOK] = moverPieces[ROOK] | squareMasks[61];
                 }
             }
-            moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
-            break;
+        }
 
-        case ENPASSANT:
+        if (moveType == ENPASSANT){
             if (newPos->whiteToMove){ //If white pawn enpassants a black pawn, delete a black pawn on the row below
                 opponentPieces[PAWN] = opponentPieces[PAWN] & ~squareMasks[to-8];
             }
             else{ //If black pawn enpassants a white pawn, delete a white pawn on the row above
                 opponentPieces[PAWN] = opponentPieces[PAWN] & ~squareMasks[to+8];
             }
-            break;
-
-        default:
-            break;
+        }
     }
 }
 
