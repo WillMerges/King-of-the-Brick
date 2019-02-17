@@ -243,7 +243,7 @@ bool Board::parseFen(std::string fen, Position * p){
     std::string rowstr;
     std::istringstream ss(fen);
     this->pos=p;
-    memset(this->pos, 0, sizeof(this->pos));
+    memset(*(this->pos), 0, sizeof(Position));
     int up = 7; //start at corner
     int right;
 
@@ -331,5 +331,5 @@ bool Board::parseFen(std::string fen, Position * p){
 
 bool Board::isKingInCenter(){
     Bitboard * moverPieces = pos->whiteToMove ? pos->whitePieces : pos->blackPieces; //getting the pieces of who is moving
-    return (moverPieces[KING] & centerSquares) != 1;
+    return (moverPieces[KING] & centerSquares);
 }
