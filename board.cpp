@@ -15,10 +15,10 @@ void Board::undoMove(){
     pos=pos->prevPos;
 }
 bool Board::legal() {
-	if (!boardInfo->whiteToMove){
-		return !isSquareAttacked(currentBoard(), boardInfo->WhiteKingBB, true);
+	if (!pos->whiteToMove){
+		return !isSquareAttacked(pos, pos->whitePieces[KING], true);
 	}
-	return !isSquareAttacked(currentBoard(), boardInfo->BlackKingBB, false);
+	return !isSquareAttacked(pos, pos->blackPieces[KING], false);
 }
 
 bool Board::isCheckmate() {
