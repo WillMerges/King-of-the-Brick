@@ -120,10 +120,6 @@ U8 getAllLegalMoves(Board* b, ExtMove list[]){
 	
 	
 	U8 count = getAllPseudoLegalMoves(b->pos, list);
-    char buffer[20];
-    for(int i = 0; i < count; i++){
-        printf("%s",UCI::getMoveString(list[i].move,buffer));
-    }
 	bool check = b->isOwnKingInCheck();
 	int j = 0;
 	U64 mask;
