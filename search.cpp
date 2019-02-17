@@ -7,13 +7,14 @@ int getBestMove(Board * baord, Config * config){
 }
 
 int alphaBeta(Board * board, int alpha, int beta, int depth){
-    ExtMoves moves[MAX_MOVES];
+    ExtMove moves[MAX_MOVES];
     int moveCount = getAllLegalMoves(board,moves);
-    int eval = evalutate(board);
+    int eval = evaluate(board);
     if(depth <= 0 || moveCount <= 0){
         return eval;
     }
     //Do null move pruning
+    int val;
     int adjDepth=depth-1;
     bool whiteToMove=board->pos->whiteToMove;
     for(int i = 0; i < moveCount; i++){
@@ -31,5 +32,3 @@ int alphaBeta(Board * board, int alpha, int beta, int depth){
     return alpha;
 }
 
-//get all legal moves
-//evaluate
