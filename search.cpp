@@ -4,7 +4,7 @@
 #include "movegen.h"
 
 
-int getBestMove(Board * board, Config * config){
+Move getBestMove(Board * board, Config * config){
     ExtMove moves[MAX_MOVES];
     int moveCount = getAllLegalMoves(board, moves);
     int lowest = INT_MAX;
