@@ -147,7 +147,7 @@ void UCI::go(Board * board, istringstream *parser){
 	//Search::setConfig(&cfg);
 	Move bestMove = getBestMove(board,&cfg);
 	
-	//printf("bestmove %s\n", getMoveString(bestMove,buffer));
+	printf("bestmove %s\n", getMoveString(bestMove,buffer));
 }
 int UCI::perft(Board* b, int depth) {
 	if (depth == 0){
