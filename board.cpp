@@ -17,7 +17,7 @@ bool Board::isOwnKingInCheck(){
 	if(pos->whiteToMove)
 		return isSquareAttacked(pos, pos -> whitePieces[KING],true);
 	else
-		return isSquareAttacked(pos, pos -> blackPieces[KING],false);
+		return isSquareAttacked(pos, pos -> blackPieces[KING],false);   
 }
 
 void Board::makeNullMove(){
@@ -31,7 +31,7 @@ void Board::makeNullMove(){
 
 
     //TODO update zobrist
-    newPos->whiteToMove!=pos->whiteToMove;
+    newPos->whiteToMove=!pos->whiteToMove;
     pos=newPos;
 }
 
