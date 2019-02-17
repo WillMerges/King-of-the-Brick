@@ -240,12 +240,13 @@ bool Board::parseFen(std::string fen, Position * p){
     int right;
 
     while(std::getline(ss, rowstr, '/')) {
+        memset(this->pos, 0, sizeof(this->pos));
         right = 0;
         const char *row = rowstr.c_str();
 
         while(*row != '\0') {
             if(!(*row>'0' && *row <'9')) {
-                U64 sq = squareMasks[getSquare(right, up)];
+                U64 sq = squareMasks[right*8+up];
                 if(*row == 'p') {
                     this->pos->blackPieces[PAWN] |= sq;
                 } else if(*row == 'k') {
