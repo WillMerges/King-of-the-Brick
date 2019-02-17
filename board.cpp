@@ -19,7 +19,7 @@ bool Board::isCheckmate() {
     int numMoves = 0;
     numMoves = getAllLegalMoves(this, moves);
 
-    return isOwnKingInCheck && !getAllLegalMoves(this, moves);
+    return isOwnKingInCheck && !getAllLegalMoves(this->, moves);
 }
 
 bool Board::isDrawn() {
