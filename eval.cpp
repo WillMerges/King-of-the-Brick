@@ -37,5 +37,5 @@ int evaluate(Board *board) {
         }
     }
 
-    int material = material_eval(board->pos);
+    return material_eval(board->pos);
 }
