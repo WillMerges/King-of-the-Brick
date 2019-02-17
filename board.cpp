@@ -16,8 +16,8 @@ void Board::undoMove(){
 
 bool Board::isCheckmate() {
     ExtMove moves[100];
-    int moves = 0;
-    moves = getAllLegalMoves(this, moves);
+    int numMoves = 0;
+    numMoves = getAllLegalMoves(this, moves);
 
     return isOwnKingInCheck && !getAllLegalMoves(this, moves);
 }
