@@ -1,101 +1,243 @@
-#include <iostream>
 #include <string>
+#include <iostream>
 #include <sstream>
-#include "bitboard.h"
 #include "board.h"
-#include "types.h"
+#include "movegen.h"
+#include "bitboard.h"
+#include "uci.h"
+#include "eval.h"
+#include "search.h"
+#include "bbmagic.h"
+#include <stdio.h>
+#include "string.h"
+using namespace std;
+std::string StartPositionFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
-Board board;
-
-Config zero_config() {
- 	Config c = {0};
-	return c;
+#include <time.h>
+#include <sys/time.h>
+double get_wall_time(){
+    struct timeval time;
+    if (gettimeofday(&time,NULL)){
+        //  Handle error
+        return 0;
+    }
+    return (double)time.tv_sec + (double)time.tv_usec * .000001;
+}
+double get_cpu_time(){
+    return (double)clock() / CLOCKS_PER_SEC;
 }
 
-std::string get_tokens() {
-	std::string token;
-	getline(std::cin, token);
-	return token;
-}
 
+char* UCI::getMoveString(Move m, char* ret){
+	char from[3], to[3];
+	char* arr = getAlgebraicPos(from_sq(m));
+	from[0] = arr[0];from[1]=arr[1];from[2]=arr[2];from[3]=arr[3];
+	
+	arr = getAlgebraicPos(to_sq(m));
 
-void position(std::stringstream ss) {
-	//have a fenstring from the ss
-	//given this fenstring, make these moves ...
-
-
-	std::string token;
-	std::getline(ss, token, ' ');
-
-	std::string boardfen;
-	if(!token.compare("startpos")) {
-		boardfen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+	to[0] = arr[0];to[1]=arr[1];to[2]=arr[2];to[3]=arr[3];
+	if(promotion_type(m)!=PAWN && promotion_type(m) != KING){
+		switch(promotion_type(m)){
+			case KNIGHT:
+				snprintf(ret,10,"%s%sn",from,to);
+				break;
+			case QUEEN:
+				snprintf(ret,10,"%s%sq",from,to);
+				break;
+			case ROOK:
+				snprintf(ret,10,"%s%sr",from,to);
+				break;
+			case BISHOP:
+				snprintf(ret,10,"%s%sb",from,to);
+				break;
+			default:
+				snprintf(ret,10,"%s%su",from,to);
+				break;
+			}
 	}else{
-		for(int i = 0; i < 6; i++){
-			std::getline(ss, token, ' ');
-			boardfen.append(token);
-			boardfen.append(" ");
+		snprintf(ret,10,"%s%s",from,to);
+	}
+	return ret;
+}
+Move UCI::toMove(Board * board, std::string move){
+	//printf("%s\n", move.c_str());
+	char curMove[100];
+	ExtMove moves[MAX_MOVES];
+	U8 count = getAllLegalMoves(board,moves);
+	for(int i = 0; i < count; i++){
+		memset(&curMove[0], 0, sizeof(curMove));
+		Move move1 = moves[i].move;
+		//printf("Compare %s : %s\n", move.c_str(), getMoveString(move1,curMove)); 
+		if(strcmp(move.c_str(),getMoveString(move1,curMove)) == 0){
+			//printf("RET\n");
+			return move1;
 		}
 	}
-	board.parseFen(boardfen);
+	return -1;//BRITTLE. Checked in SetPosition. Only currently works because Moves use few enough bits the top can't be negative
+}
+
+
+void UCI::setPosition(Board * board, BoardInfo* info, istringstream* parser){
+	std::string token, fen;
+	(*parser) >> token;
+	if(token=="startpos"){
+		fen=StartPositionFEN;
+		(*parser) >> token;
+	}else if(token=="fen"){
+		 while ((*parser) >> token && token != "moves"){
+            fen += token + " ";
+		 }
+	}else{
+		return;
+	}
+	board->readFromFen(fen,info);
+	while((*parser) >> token){
+		Move m = toMove(board, token);
+		if(m != -1){
+			board->makeMove(m);
+		}else{
+			break;
+		}
+	}
+}
+void printUciOptions(){
+	std::cout<<"option name Hash type spin default 32 min 1 max 1048576\n";
+}
+void setOption(istringstream *parser){
+	string token;
+	if((*parser) >> token){
+			if(token == "name"){
+					if((*parser) >> token){
+						if(token == "Hash"){
+							if((*parser) >> token){
+								if(token == "value"){
+									if((*parser) >> token){
+										int size = atoi(token.c_str());
+										TT::setSize(1048576*size);
+										return;
+									}
+								}
+							}
+						}
+					}
+			}
+	}
+	printf("Unrecognized option\n");
+	return;
+}
+void UCI::go(Board * board, istringstream *parser){
+		char buffer[100];
+	string token;
+	Search::Config cfg;
+	while((*parser) >> token){
+		if(token == "depth"){
+			(*parser) >> cfg.depth;
+		}else if(token =="wtime"){
+			(*parser) >> cfg.wTime;
+		}else if(token=="btime"){
+			(*parser) >> cfg.bTime;
+		}else if(token == "winc"){
+			(*parser) >> cfg.winc;
+		}else if(token == "binc"){
+			(*parser) >> cfg.binc;
+		}else if(token == "movetime"){
+			(*parser) >> cfg.movetime;
+		}else if(token == "infinite"){
+			cfg.depth = 20;
+		}
+	}
+	Search::setConfig(&cfg);
+	Move bestMove = Search::getBestMove(board);
+	printf("bestmove %s\n", getMoveString(bestMove,buffer));
+}
+int UCI::perft(Board* b, int depth) {
+	if (depth == 0){
+		return 1;
+	}
+	ExtMove moveList[MAX_MOVES]={};
+	int num_moves = getAllLegalMoves(b, moveList);
+	int count = 0;	
+	for (int i = 0; i < num_moves; i++) {
+		b->makeMove(moveList[i].move);
+		count += perft(b, depth - 1);
+		b->undoMove();
+	}
 	
-	std::string move;
-	while(getline(ss, move, ' ')){
-		const char* movestr = move.c_str();
-		
-		//convert move string to move object
-		U8 file1 = getFile(movestr[0] - 'a');
-		U8 rank1 = getRank(movestr[1] - '1');
+	return count;
+}
 
-		U8 file2 = getFile(movestr[2] - 'a');
-		U8 rank2 = getRank(movestr[3] - '1');
-		
-		//if its a promotion
-		
-
-		//create
-		//board.makeMove();
+int UCI::divide(Board* b, int depth) {
+	ExtMove moveList[MAX_MOVES]={};
+	int num_moves = getAllLegalMoves(b, moveList);
+	int count = 0;
+	char buffer[100];
+	for (int i = 0; i < num_moves; i++) {
+		b->makeMove(moveList[i].move);
+		int countc = perft(b, depth - 1);
+		count+= countc;
+		printf("%s : %i\n", getMoveString(moveList[i].move,buffer),countc);
+		b->undoMove();
 	}
-	//this is ben's line
+	return count;
+}
 
-	int x;
-	(void) x;
+void UCI::perft(Board * board, istringstream * parser){
+	int depth;
+	(*parser) >> depth;
+	double time = get_wall_time();
+	int numNodes = divide(board, depth);
+	double newTime = get_wall_time();
+	printf("---------------\n");
+	printf("Nodes: %i\n" , numNodes);
+	printf("Took %fs. nps: %f.\n",newTime-time,numNodes/(newTime-time));
+}
+#include "bitboard.h"
+#include "move.h"
+bool UCI::loop(){
+	Board b;
+	BoardInfo info;
+	std::string token, cmd;
 	
-}
-
-
-void handle_token(int* running) {
-	std::cout << "> ";
-	std::string line = get_tokens();
-
-	std::stringstream ss(line);
-	std::string token;
-
-	std::getline(ss, token, ' ');
-
-
-	if(!token.compare("uci")) {
-		std::cout << "King of the Brick Chess Engine" << std::endl;
-		std::cout << "uciok" << std::endl << std::endl;
-	} else if(!token.compare("go")) {
-
-	} else if(!token.compare("position")) {
-		//position(ss);
-	} else if(!token.compare("perf")) {
-
-	} else if(!token.compare("ucinewgame")) {
-		//new stuff
-		std::cout << "> ";
-	} else if(!token.compare("quit")) {
-		std::cout << "goodbye";
-		std:: cout << std::endl;
-		*running = 0;
+	TT::setSize(1048576*32);//1mb
+	b.readFromFen(StartPositionFEN,&info);
+	std::cout << ("Apollo v1.2.1 by Stuart Nevans Locke") << std::endl;
+	while(true){
+		getline(cin,cmd);
+		istringstream parser(cmd);
+		parser >> skipws >> token;
+		if(token == "quit"){
+			return false;
+		}
+		if(token == "uci"){
+			std::cout << "id name Apollo Release 1.2.1\n";
+			std::cout << "id author Stuart Nevans Locke\n\n";
+			printUciOptions();
+			std::cout << "uciok" << std::endl;
+		}else if(token == "ucinewgame"){
+			b.readFromFen(StartPositionFEN,&info);
+			TT::clear();
+		}else if(token == "isready"){
+			std::cout << "readyok" << std::endl;
+		}else if(token == "position"){
+			setPosition(&b,&info,&parser);
+		}else if(token=="setoption"){
+			setOption(&parser);
+		}else if(token == "go"){
+			go(&b,&parser);
+		}else if(token == "perft"){
+			perft(&b,&parser);
+		}else if(token == "eval"){
+			printf("Current Position: %i\n",Eval::evaluate(&b));
+		}else if(token == "d"){
+			Move bestMove=65;
+			if(TT::probe(b.currentBoard()->zobrist)->hash == b.currentBoard()->zobrist){
+				bestMove = TT::probe(b.currentBoard()->zobrist)->bestMove;
+			}
+			char buffer[100];
+			printf("FEN: %s\nIs checkmate: %i\nIs draw: %i\nZobrist: %llx\nEval %i\nHash Move: %s\nPinned Pieces %llx\n", b.getFen().c_str(), b.isCheckmate(), b.isDraw(), b.currentBoard()->zobrist, Eval::evaluate(&b), UCI::getMoveString(bestMove,buffer),b.currentBoard()->pinnedPieces);
+		}
 	}
+	return true;
+
 }
 
-int main(int argc, char** argv) {
-	int running = 1;
-	while(running) {
-		handle_token(&running);
-	}
-}
