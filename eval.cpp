@@ -4,11 +4,7 @@
 #include <limits.h>
 
 //Pawn, King, Rook, Knight, Bishop, Queen
-int piece_values[6] = {1,0,5,1,1,9};
-
-//if king
-int middle_values[4] = {35,36,27,28};
-
+int piece_values[6] = {100,0,500,300,300,900};
 
 int material_eval(Position *p) {
     int white = 0;
