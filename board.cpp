@@ -14,6 +14,7 @@ const U64 centerSquares = squareMasks[35] | squareMasks[36] | squareMasks[27] | 
 void Board::undoMove(){
     pos=pos->prevPos;
 }
+
 bool Board::legal() {
 	if (!pos->whiteToMove){
 		return !isSquareAttacked(pos, pos->whitePieces[KING], true);
@@ -134,6 +135,7 @@ void Board::makeMove(Move move){
             }
         }
     }
+    pos=newPos;
 }
 
 bool Board::parseFen(std::string fen, Position * p){
