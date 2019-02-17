@@ -8,6 +8,8 @@
 #include "movegen.h"
 #include <stdbool.h>
 #include "bbmagic.h"
+#include "uci.h"
+
 Position allPos[MAX_MOVES];
 const U64 centerSquares = squareMasks[35] | squareMasks[36] | squareMasks[27] | squareMasks[28];
 
@@ -207,17 +209,19 @@ bool Board::parseFen(std::string fen, Position * p){
     int i = 0;
     while(std::getline(endstr, substr, ' ')) {
         const char* cstr = substr.c_str();
-        if(i==0) {
+        if(i==0) { //who's move
             pos->whiteToMove=((*(cstr)=='w'));
-        } else if(i==1) {
+        } else if(i==1) { //castling
             this->pos->whiteKingCastle=(strstr(cstr,"K") 	!=0?1:0);
             this->pos->whiteQueenCastle=(strstr(cstr,"Q")!=0?1:0);
             this->pos->blackKingCastle=(strstr(cstr,"k")!=0?1:0);
             this->pos->blackQueenCastle=(strstr(cstr,"q")!=0?1:0);
-        } else if(i==3) {
-            this->pos->fiftyMoveRule = atoi(substr.c_str());
-        } else if(i==4) {
-            this->pos->moveNumber = atoi(substr.c_str())*2-1;
+        } else if(i==2) { //en passant
+            this->pos->enPassantLoc=algebraicPosToLoc(cstr);
+        } else if(i==3) { //50 move rule
+            this->pos->fiftyMoveRule = atoi(cstr);
+        } else if(i==4) { //move number
+            this->pos->moveNumber = atoi(cstr)*2-1;
             if(!this->pos->whiteToMove) {
                 this->pos->moveNumber++;
             }

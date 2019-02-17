@@ -7,6 +7,7 @@
 
 double get_wall_time();
 double get_cpu_time();
+U8 algebraicPosToLoc(const char * pos);
 
 namespace UCI{
 	int divide(Board* b, int depth);
