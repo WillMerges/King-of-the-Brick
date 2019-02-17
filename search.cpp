@@ -5,22 +5,22 @@
 
 
 int getBestMove(Board * board, Config * config){
-    ExtMoves moves[MAX_MOVES];
+    ExtMove moves[MAX_MOVES];
     int moveCount = getAllLegalMoves(board, moves);
     int lowest = INT_MAX;
     int highest = INT_MIN;
     Move move_highest;
     Move move_lowest;
     for(int i=0; i<moveCount; i++) {
-        int eval = alphaBeta(board, INT_MIN, INT_MAX, 1);
+        int eval = alphaBeta(board, INT_MIN, INT_MAX, 1,NULL);
         if(eval > highest) {
             highest = eval;
-            move_highest = moves[i];
+            move_highest = moves[i].move;
         } if(eval < lowest) {
             lowest = eval;
-            move_lowest = moves[i];
+            move_lowest = moves[i].move;
         }
-        if(board->pos->whiteToMove()) {
+        if(board->pos->whiteToMove) {
             return move_highest;
         } else {
             return move_lowest;
@@ -28,10 +28,10 @@ int getBestMove(Board * board, Config * config){
     }
 }
 
-int alphaBeta(Board * board, int alpha, int beta, int depth){
-    ExtMoves moves[MAX_MOVES];
+int alphaBeta(Board * board, int alpha, int beta, int depth,LINE * pline){
+    ExtMove moves[MAX_MOVES];
     int moveCount = getAllLegalMoves(board,moves);
-    int eval = evalutate(board);
+    int eval = evaluate(board);
     if(depth <= 0 || moveCount <= 0){
         return eval;
     }
@@ -41,7 +41,7 @@ int alphaBeta(Board * board, int alpha, int beta, int depth){
     for(int i = 0; i < moveCount; i++){
         Move move = moves[i].move;
         board->makeMove(move);
-        int val = -alphaBeta(board,-beta,-alpha,adjDepth);
+        int val = -alphaBeta(board,-beta,-alpha,adjDepth,NULL);
         board->undoMove();
         if(val > alpha){
             alpha=val;
