@@ -5,7 +5,7 @@
 #include <string.h>
 #include <sstream>
 #include <stdlib.h>
-#include "bitboard.h"
+#include "bbmagic.h"
 
 Position allPos[MAX_MOVES];
 
