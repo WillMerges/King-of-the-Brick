@@ -1,6 +1,7 @@
 #include "board.h"
 #include "types.h"
 #include "move.h"
+#include "movegen.h"
 
 struct LINE{
     Move pastMoves[30];
