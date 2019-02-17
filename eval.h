@@ -3,8 +3,6 @@
 
 #include "board.h"
 
-namespace Eval {
-    int evaluate(Board *board);
-}
+int evaluate(Board *board);
 
 #endif

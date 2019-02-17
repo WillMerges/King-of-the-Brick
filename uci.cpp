@@ -218,7 +218,7 @@ bool UCI::loop(){
 		}else if(token == "perft"){
 			perft(&b,&parser);
 		}else if(token == "eval"){
-			printf("Current Position: %i\n",Eval::evaluate(&b));
+			printf("Current Position: %i\n",evaluate(&b));
 		}else if(token == "d"){
 			
 			//char buffer[100];
