@@ -22,6 +22,10 @@ bool Board::isCheckmate() {
     return isOwnKingInCheck && !getAllLegalMoves(this, moves);
 }
 
+bool Board::isDrawn() {
+    return !this->pos->fiftyMoveRule == 50;
+}
+
 bool Board::isOwnKingInCheck(){
 	if(pos->whiteToMove)
 		return isSquareAttacked(pos, pos -> whitePieces[KING],true);
