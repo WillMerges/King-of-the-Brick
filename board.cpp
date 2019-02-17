@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include "movegen.h"
 #include <stdbool.h>
-
+#include "bbmagic.h"
 Position allPos[MAX_MOVES];
 
 void Board::undoMove(){
@@ -23,7 +23,7 @@ bool Board::isCheckmate() {
 }
 
 bool Board::isDrawn() {
-    return !this->pos->fiftyMoveRule == 50;
+    return !(this->pos->fiftyMoveRule == 50);
 }
 
 bool Board::isOwnKingInCheck(){
