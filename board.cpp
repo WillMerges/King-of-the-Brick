@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include "bbmagic.h"
 Position allPos[MAX_MOVES];
+const U64 centerSquares = squareMasks[35] | squareMasks[36] | squareMasks[27] | squareMasks[28];
 
 void Board::undoMove(){
     pos=pos->prevPos;
@@ -81,8 +82,13 @@ void Board::makeMove(Move move){
         case NORMAL:
             moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
             //setting possible grid to enpassant
-            if (pieceToMove == PAWN && (from==to+16 | from==to-16)){
-
+            if (pieceToMove == PAWN && (from==(to+16) || from==(to-16))){
+                if (newPos->whiteToMove){
+                    newPos->enPassantLoc = to - 8;
+                }
+                else{
+                    newPos->enPassantLoc = to + 8;
+                }
             }
             break;
 
@@ -214,3 +220,9 @@ bool Board::parseFen(std::string fen){
     }
     return true;
 }
+
+bool Board::isKingInCenter(){
+    Bitboard * moverPieces = pos->whiteToMove ? pos->whitePieces : pos->blackPieces; //getting the pieces of who is moving
+    return (moverPieces[KING] & centerSquares) != 1;
+}
+
