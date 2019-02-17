@@ -17,7 +17,7 @@ Move getBestMove(Board * board, Config * config){
     for(int i=0; i<moveCount; i++) {
         board->makeMove(moves[i].move);
 
-        int eval = alphaBeta(board, INT_MIN, INT_MAX, config->depth-1,NULL);
+        int eval = alphaBeta(board, INT_MIN+500, INT_MAX-500, config->depth-1,NULL);
                printf("Eval: %s %i\n",UCI::getMoveString(moves[i].move,buffer),eval);
         board->undoMove();
         if(eval > highest) {
