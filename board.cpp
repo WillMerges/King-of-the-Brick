@@ -7,31 +7,29 @@
 #include <stdlib.h>
 #include "movegen.h"
 #include <stdbool.h>
-#include "bbmagic.h"
+
 Position allPos[MAX_MOVES];
-const U64 centerSquares = squareMasks[35] | squareMasks[36] | squareMasks[27] | squareMasks[28];
 
 void Board::undoMove(){
     pos=pos->prevPos;
 }
 
-bool Board::legal() {
-	if (!pos->whiteToMove){
-		return !isSquareAttacked(pos, pos->whitePieces[KING], true);
-	}
-	return !isSquareAttacked(pos, pos->blackPieces[KING], false);
-}
-
 bool Board::isCheckmate() {
     ExtMove moves[100];
     int numMoves = 0;
-    numMoves = getAllLegalMoves(this, moves);
+    numMoves = getAllLegalMoves(this->pos, moves);
 
-    return isOwnKingInCheck() && numMoves==0;
+    return isOwnKingInCheck && !getAllLegalMoves(this->pos, moves);
 }
 
 bool Board::isDrawn() {
-    return !(this->pos->fiftyMoveRule == 50);
+    return !this->pos->fiftyMoveRule == 50;
+}
+
+bool Board::legal() {
+    if(!this->pos->whiteToMove) {
+        return !
+    }
 }
 
 bool Board::isOwnKingInCheck(){
@@ -51,7 +49,7 @@ void Board::makeNullMove(){
 
 
     //TODO update zobrist
-    newPos->whiteToMove=!pos->whiteToMove;
+    newPos->whiteToMove!=pos->whiteToMove;
     pos=newPos;
 }
 
@@ -84,26 +82,22 @@ void Board::makeMove(Move move){
     }
 
     //Accounting for move types
-    if (moveType == PROMOTION){
+    switch (moveType)
+    {
+        case NORMAL:
+            moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
+            //setting possible grid to enpassant
+            if (pieceToMove == PAWN && (from==to+16 | from==to-16)){
+
+            }
+            break;
+
+        case PROMOTION:
             PieceType newPiece = get_promotion_type(move);
             moverPieces[newPiece] =  moverPieces[newPiece] | squareMasks[to];
-    }
-    else{
-        moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
+            break;
 
-        if (moveType == NORMAL){
-            //setting possible grid to enpassant
-            if (pieceToMove == PAWN && (from==(to+16) || from==(to-16))){
-                if (newPos->whiteToMove){
-                    newPos->enPassantLoc = to - 8;
-                }
-                else{
-                    newPos->enPassantLoc = to + 8;
-                }
-            }
-        }
-
-        if (moveType == CASTLING){
+        case CASTLING:
             if (newPos->whiteToMove){
                 if(to == 2){ //If white king is moving to C1
                     moverPieces[ROOK] = moverPieces[ROOK] & ~squareMasks[0];
@@ -124,29 +118,27 @@ void Board::makeMove(Move move){
                     moverPieces[ROOK] = moverPieces[ROOK] | squareMasks[61];
                 }
             }
-        }
+            moverPieces[pieceToMove] =  moverPieces[pieceToMove] | squareMasks[to];
+            break;
 
-        if (moveType == ENPASSANT){
+        case ENPASSANT:
             if (newPos->whiteToMove){ //If white pawn enpassants a black pawn, delete a black pawn on the row below
                 opponentPieces[PAWN] = opponentPieces[PAWN] & ~squareMasks[to-8];
             }
             else{ //If black pawn enpassants a white pawn, delete a white pawn on the row above
                 opponentPieces[PAWN] = opponentPieces[PAWN] & ~squareMasks[to+8];
             }
-        }
+            break;
+
+        default:
+            break;
     }
-    pos=newPos;
-    for(int i=0; i<NUM_PIECE_TYPES; i++) {
-        this->pos->WhitePiecesBB |= this->pos->whitePieces[i];
-        this->pos->BlackPiecesBB |= this->pos->blackPieces[i];
-    }
-    this->pos->AllPiecesBB = this->pos->WhitePiecesBB | this->pos->BlackPiecesBB;
 }
 
-bool Board::parseFen(std::string fen, Position * p){
+bool Board::parseFen(std::string fen){
     std::string rowstr;
     std::istringstream ss(fen);
-    this->pos=p;
+
     int up = 7; //start at corner
     int right;
 
@@ -155,7 +147,7 @@ bool Board::parseFen(std::string fen, Position * p){
         const char *row = rowstr.c_str();
 
         while(*row != '\0') {
-            if(*row<'0' && *row >'9') {
+            if(!(*row > '0' && *row <'9')) {
                 U64 sq = squareMasks[getSquare(right, up)];
                 if(*row == 'p') {
                     this->pos->blackPieces[PAWN] |= sq;
@@ -226,12 +218,5 @@ bool Board::parseFen(std::string fen, Position * p){
     if(this->pos->moveNumber > MAX_MOVES) {
         this->pos->moveNumber = 1;
     }
-    allPos[this->pos->moveNumber]=*pos;
     return true;
 }
-
-bool Board::isKingInCenter(){
-    Bitboard * moverPieces = pos->whiteToMove ? pos->whitePieces : pos->blackPieces; //getting the pieces of who is moving
-    return (moverPieces[KING] & centerSquares) != 1;
-}
-
