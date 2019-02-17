@@ -2,7 +2,9 @@
 #include "search.h"
 #include <limits.h>
 #include "movegen.h"
+#include "eval.h"
 
+bool canDoNullMove;
 
 Move getBestMove(Board * board, Config * config){
     ExtMove moves[MAX_MOVES];
@@ -37,7 +39,21 @@ int alphaBeta(Board * board, int alpha, int beta, int depth,LINE * pline){
     if(depth <= 0 || moveCount <= 0){
         return eval;
     }
-    //Do null move pruning
+    
+    //Null pruning
+    if(canDoNullMove && evaluate(board) > 1000 && !board->isOwnKingInCheck() && board->pos->moveNumber){
+        canDoNullMove=false;
+        board->makeNullMove();
+        int reduction = depth/4+3;
+        int val = -alphaBeta(board, -beta, -alpha, depth-reduction, NULL);
+        board->undoMove();
+        canDoNullMove=true;
+        if(val >= beta){
+            return beta;
+        }
+    }
+
+
     int adjDepth=depth-1;
     bool whiteToMove=board->pos->whiteToMove;
     for(int i = 0; i < moveCount; i++){
