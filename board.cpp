@@ -72,7 +72,7 @@ void Board::makeMove(Move move){
     newPos->prevPos=pos;
     newPos->moveNumber+=1;
     newPos->fiftyMoveRule+=1;
-
+    newPos->enPassantLoc=NO_ENPASSANT;
     //Setting up some local variables to make things easier later on
     PieceType pieceToMove = get_piece_moved(move);
     U8 from = from_sq(move);
